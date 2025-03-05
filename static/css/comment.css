@@ -1,0 +1,20 @@
+.comment-card {
+    transition: all 0.2s ease;
+}
+
+.comment-card:hover {
+    transform: translateX(5px);
+}
+
+.like-comment.text-danger {
+    color: #dc3545 !important;
+}
+
+.comment-card .card {
+    border-radius: 12px;
+    border: 1px solid #eee;
+}
+
+.comment-card .card-body {
+    padding: 1rem;
+}

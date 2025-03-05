@@ -1,0 +1,57 @@
+<!-- transactions/templates/transactions/receipt_print.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Receipt</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .receipt {
+            border: 1px solid #000;
+            padding: 20px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .receipt h2 {
+            text-align: center;
+        }
+        .receipt p {
+            margin: 10px 0;
+        }
+        @media print {
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="receipt">
+        <h2> Receipt details </h2>
+        <p><strong>Transaction ID:</strong> {{ transaction.id }}</p>
+        <p><strong>User:</strong> {{ transaction.user.username }}</p>
+        <p><strong>Agent:</strong> {{ transaction.agent.username }}</p>
+        <p><strong>Amount:</strong> {{ transaction.amount }} tokens</p>
+        <p><strong>Type:</strong> {{ transaction.transaction_type }}</p>
+        <p><strong>Date:</strong> {{ transaction.timestamp }}</p>
+    </div>
+    <!-- transactions/templates/transactions/receipt_print.html -->
+    <div class="receipt">
+        <h2>Transaction Receipt</h2>
+        <p><strong>Transaction ID:</strong> {{ transaction.id }}</p>
+        <p><strong>Hashed Detail:</strong> {{ transaction.hashed_detail }}</p>
+        <p><strong>Timestamp:</strong> {{ transaction.timestamp|date:"M d, Y H:i" }}</p>
+    </div>
+        </div>
+    <div class="no-print" style="text-align: center; margin-top: 20px;">
+        <button onclick="window.print()">Print Receipt</button>
+        <a href="{% url 'transactions:process_withdrawal' %}">
+            <button>Back to Withdrawals</button>
+        </a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,13 @@
+<!-- community/templates/community/partials/notification.html -->
+<div class="dropdown-item">
+    <div class="d-flex align-items-center">
+        <img src="{{ notification.tweet.user.userprofile.profile_picture.url }}" 
+             class="rounded-circle me-2" width="30" height="30">
+        <div>
+            <small>{{ notification.message }}</small>
+            <div class="text-muted" style="font-size: 0.8rem;">
+                {{ notification.created_at|timesince }} ago
+            </div>
+        </div>
+    </div>
+</div>

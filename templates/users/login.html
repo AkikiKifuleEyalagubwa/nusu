@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}  <!-- Add this line -->
+
+{% block content %}
+<div class="card shadow-sm mx-auto" style="max-width: 400px;">
+    <div class="card-body">
+        <h2 class="card-title text-center mb-4">🔑 Login</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="username" class="form-label">👤 Username</label>
+                <input type="text" name="username" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">🔒 Password</label>
+                <input type="password" name="password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-dark w-100">🚀 Login</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

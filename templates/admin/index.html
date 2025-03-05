@@ -1,0 +1,47 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<div class="dashboard">
+    <h1>📊 Savings App Dashboard</h1>
+    <div class="app-card">
+        <h2>Users</h2>
+        <ul>
+            <li><a href="{% url 'admin:users_customuser_changelist' %}">View Users</a></li>
+            <li><a href="{% url 'admin:users_customuser_add' %}">Add User</a></li>
+        </ul>
+    </div>
+
+    <div class="app-card">
+        <h2>Tokens</h2>
+        <ul>
+            <li><a href="{% url 'admin:tokens_tokenrate_changelist' %}">View Token Rates</a></li>
+            <li><a href="{% url 'admin:tokens_tokenallocation_changelist' %}">View Allocations</a></li>
+            <li><a href="{% url 'admin:tokens_tokenrate_add' %}">Add Token Rate</a></li>
+        </ul>
+    </div>
+
+    <div class="app-card">
+        <h2>Transactions</h2>
+        <ul>
+            <li><a href="{% url 'admin:transactions_transaction_changelist' %}">View Transactions</a></li>
+            <li><a href="{% url 'admin:transactions_transaction_add' %}">Add Transaction</a></li>
+        </ul>
+    </div>
+
+    <div class="app-card">
+        <h2>Streaks</h2>
+        <ul>
+            <li><a href="{% url 'admin:streaks_streak_changelist' %}">View Streaks</a></li>
+            <li><a href="{% url 'admin:streaks_streak_add' %}">Add Streak</a></li>
+        </ul>
+    </div>
+
+    <div class="app-card">
+        <h2>Community</h2>
+        <ul>
+            <li><a href="{% url 'admin:community_post_changelist' %}">View Posts</a></li>
+            <li><a href="{% url 'admin:community_post_add' %}">Add Post</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

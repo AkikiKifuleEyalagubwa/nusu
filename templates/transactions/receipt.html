@@ -1,0 +1,85 @@
+<!-- templates/receipts/transaction_receipt.html -->
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="card shadow-sm mx-auto" style="max-width: 600px;">
+    <div class="card-body">
+        <div class="text-center mb-4">
+            <h2 class="mb-3">🏦 NUSU App Receipt</h2>
+            <img src="{% static 'images/logo.png' %}" alt="Logo" style="height: 80px;" class="mb-3">
+            <p class="text-muted">Transaction ID: {{ transaction.id }}</p>
+        </div>
+
+        <div class="receipt-details">
+            <div class="row mb-2">
+                <div class="col-6"><strong>Date:</strong></div>
+                <div class="col-6 text-end">{{ transaction.timestamp|date:"d/m/Y H:i" }}</div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-6"><strong>User:</strong></div>
+                <div class="col-6 text-end">{{ transaction.user.username }} (ID: {{ transaction.user.id }})</div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-6"><strong>Agent:</strong></div>
+                <div class="col-6 text-end">
+                    {% if transaction.agent %}
+                        {{ transaction.agent.username }}
+                    {% else %}
+                        System
+                    {% endif %}
+                </div>
+            </div>
+            <hr>
+            <div class="row mb-2">
+                <div class="col-6"><strong>Transaction Type:</strong></div>
+                <div class="col-6 text-end text-uppercase">{{ transaction.transaction_type }}</div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-6"><strong>Amount:</strong></div>
+                <div class="col-6 text-end">
+                    {% if transaction.transaction_type == 'deposit' %}
+                        UGX {{ transaction.amount }}
+                    {% else %}
+                        {{ transaction.amount }} Tokens
+                    {% endif %}
+                </div>
+            </div>
+            <hr>
+            <div class="row mb-2">
+                <div class="col-6"><strong>New Balance:</strong></div>
+                <div class="col-6 text-end">{{ transaction.user.userprofile.token_balance }} Tokens</div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-6"><strong>Hashed Detail:</strong></div>
+                <div class="col-6 text-end">
+                    {% if transaction.hashed_detail %}
+                        {{ transaction.hashed_detail }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-6"><strong>Previous Hash:</strong></div>
+                <div class="col-6 text-end">
+                    {% if transaction.previous_hash %}
+                        {{ transaction.previous_hash }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4 text-center">
+            <button onclick="window.print()" class="btn btn-dark">
+                🖨️ Print Receipt
+            </button>
+            <a href="{% url 'home' %}" class="btn btn-outline-dark">
+                ← Return to Home
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

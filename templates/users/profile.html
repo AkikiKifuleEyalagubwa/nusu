@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Profile Header -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <div class="d-flex flex-column flex-md-row align-items-center">
+                <!-- Profile Picture -->
+                <div class="mb-3 mb-md-0 me-md-4">
+                    <div class="profile-picture-wrapper">
+                        {% if profile_user.userprofile.profile_picture %}
+                        <img src="{{ profile_user.userprofile.profile_picture.url }}" 
+                             class="rounded-circle border" 
+                             alt="{{ profile_user.username }}"
+                             style="width: 150px; height: 150px; object-fit: cover">
+                        {% else %}
+                        <div class="initials-placeholder rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" 
+                             style="width: 150px; height: 150px; font-size: 3rem">
+                            {{ profile_user.username|first|upper }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Profile Info -->
+                <div class="flex-grow-1">
+                    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-3">
+                        <div class="mb-2 mb-md-0">
+                            <h1 class="h3 mb-1">
+                                {{ profile_user.username }}
+                                {% if profile_user.userprofile.badge != 'none' %}
+                                <span class="badge bg-{{ profile_user.userprofile.badge }} ms-2">
+                                    <i class="bi {{ profile_user.userprofile.get_badge_icon }}"></i>
+                                </span>
+                                {% endif %}
+                            </h1>
+                            <div class="text-muted">@{{ profile_user.username }}</div>
+                        </div>
+                        {% if is_owner %}
+                        <a href="{% url 'users:edit_profile' %}" class="btn btn-outline-dark">
+                            <i class="bi bi-pencil me-2"></i>Edit Profile
+                        </a>
+                        {% endif %}
+                    </div>
+
+                    <!-- Follow System Fix -->
+                    <div class="d-flex gap-4 mb-3">
+                        <div class="text-center">
+                            <div class="h5 mb-0 follower-count">{{ profile_user.userprofile.followers.count }}</div>
+                            <small class="text-muted">Followers</small>
+                        </div>
+                        <div class="text-center">
+                            <div class="h5 mb-0">{{ profile_user.userprofile.following.count }}</div>
+                            <small class="text-muted">Following</small>
+                        </div>
+                    </div>
+
+                    {% if not is_owner %}
+                    <form method="post" 
+                          action="{% if is_following %}{% url 'users:unfollow_user' username=profile_user.username %}{% else %}{% url 'users:follow_user' username=profile_user.username %}{% endif %}"
+                          class="follow-form">  <!-- Add class here -->
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-{% if is_following %}outline-{% endif %}dark rounded-pill px-4">
+                            {% if is_following %}
+                            <i class="bi bi-person-dash me-2"></i>Following
+                            {% else %}
+                            <i class="bi bi-person-plus me-2"></i>Follow
+                            {% endif %}
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tweets Section -->
+    <div class="mt-4">
+        <h5 class="mb-3"><i class="bi bi-newspaper me-2"></i>Tweets</h5>
+        <div class="tweet-list">
+            {% for tweet in tweets %}
+                {% include 'community/tweet_card.html' with tweet=tweet %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,142 @@
+<!-- templates/users/dashboard.html -->
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title mb-4"><i class="bi bi-speedometer2"></i> Dashboard</h2>
+                    
+                    <!-- Admin Actions -->
+                    {% if user.is_superuser %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5><i class="bi bi-shield-lock"></i> Admin Actions</h5>
+                            <div class="d-grid gap-2">
+                                <a href="{% url 'users:create_agent' %}" class="btn btn-dark">
+                                    <i class="bi bi-person-plus"></i> Create Agent
+                                </a>
+                                <a href="{% url 'users:send_tokens' %}" class="btn btn-dark">
+                                    <i class="bi bi-send"></i> Send Tokens
+                                </a>
+                                <a href="{% url 'users:admin_balances' %}" class="btn btn-dark">
+                                    <i class="bi bi-cash-stack"></i> System Balances
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Balances -->
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5><i class="bi bi-wallet2"></i> Your Balances</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="lead">Token Balance: {{ token_balance }} NSU</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="lead">UGX Balance: {{ profile.get_ugx_balance|floatformat:2 }} UGX</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Transfer Tokens (for normal users) -->
+                    {% if not user.is_superuser and not user.is_agent %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5><i class="bi bi-arrow-left-right"></i> Transfer Tokens</h5>
+                            <div class="d-grid">
+                                <a href="{% url 'transactions:transfer_tokens' %}" class="btn btn-dark">
+                                    <i class="bi bi-send"></i> Transfer Tokens
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Withdraw Funds (for normal users) -->
+                    {% if not user.is_agent and not user.is_superuser %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5><i class="bi bi-cash"></i> Withdraw Funds</h5>
+                            <div class="d-grid">
+                                <a href="{% url 'transactions:request_withdrawal' %}" class="btn btn-dark">
+                                    <i class="bi bi-wallet2"></i> Request Withdrawal
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Process Withdrawals (for agents) -->
+                    {% if user.is_agent or user.is_superuser %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5><i class="bi bi-cash-coin"></i> Process Withdrawals</h5>
+                            <div class="d-grid">
+                                <a href="{% url 'transactions:process_withdrawal' %}" class="btn btn-dark">
+                                    <i class="bi bi-wallet2"></i> Process Withdrawal
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Recent Transactions -->
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5><i class="bi bi-clock-history"></i> Recent Transactions</h5>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Type</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for tx in transactions %}
+                                    <tr>
+                                        <td>{{ tx.transaction_type }}</td>
+                                        <td>{{ tx.amount }}</td>
+                                        <td>{{ tx.status }}</td>
+                                        <td>{{ tx.timestamp|date:"M d, Y" }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Pending Withdrawals (for agents) -->
+                    {% if user.is_agent and pending_withdrawals %}
+                    <div class="card">
+                        <div class="card-body">
+                            <h5><i class="bi bi-exclamation-triangle"></i> Pending Withdrawals</h5>
+                            <div class="list-group">
+                                {% for withdrawal in pending_withdrawals %}
+                                <div class="list-group-item">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <strong>{{ withdrawal.user.username }}</strong>
+                                            <br>
+                                            <small>Amount: {{ withdrawal.amount }}</small>
+                                        </div>
+                                        <span class="badge bg-danger">Pending</span>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <!-- System Balances Section -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card border-primary shadow">
+                <div class="card-header bg-primary text-white">
+                    <h5><i class="bi bi-coin"></i> Token Balances</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="mb-0">Total NSU</p>
+                            <h2 class="mb-0">{{ total_tokens }}</h2>
+                        </div>
+                        <i class="bi bi-piggy-bank fs-1 text-primary"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-success shadow">
+                <div class="card-header bg-success text-white">
+                    <h5><i class="bi bi-cash-stack"></i> Fiat Value</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="mb-0">Total UGX</p>
+                            <h2 class="mb-0">{{ total_ugx|floatformat:2 }}</h2>
+                        </div>
+                        <i class="bi bi-wallet fs-1 text-success"></i>
+                    </div>
+                    <hr>
+                    <form method="post" action="{% url 'tokens:set_rate' %}">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <span class="input-group-text">1 NSU =</span>
+                            <input type="number" step="0.01" name="rate" 
+                                   value="{{ current_rate }}" class="form-control"
+                                   required>
+                            <span class="input-group-text">UGX</span>
+                            <button type="submit" class="btn btn-dark">
+                                Update Rate
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-info shadow">
+                <div class="card-header bg-info text-white">
+                    <h5><i class="bi bi-people"></i> Users</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="text-center">
+                                <h3>{{ user_count }}</h3>
+                                <small class="text-muted">Total Users</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="text-center">
+                                <h3>{{ agent_count }}</h3>
+                                <small class="text-muted">Agents</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Badge Management Section -->
+    <div class="card mb-4 shadow">
+        <div class="card-header bg-dark text-white">
+            <h4><i class="bi bi-award"></i> Badge Management</h4>
+        </div>
+        <div class="card-body">
+            <form method="post" action="{% url 'users:assign_badge' %}">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-3">
+                        <select name="badge" class="form-select mb-3">
+                            {% for value, label in badge_choices %}
+                            <option value="{{ value }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Select</th>
+                                        <th>User</th>
+                                        <th>Recommended Badge</th>
+                                        <th>Current Badge</th>
+                                        <th>Activity Score</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for user in users %}
+                                    <tr class="{% if user.recommended_badge != user.userprofile.badge %}table-warning{% endif %}">
+                                        <td>
+                                            <input type="checkbox" name="users" value="{{ user.username }}">
+                                        </td>
+                                        <td>
+                                            {{ user.username }}
+                                            {% if user.userprofile.badge != 'none' %}
+                                            <i class="bi {{ user.userprofile.get_badge_icon }} text-{{ user.userprofile.badge }}"
+                                               data-bs-toggle="tooltip" 
+                                               title="{{ user.userprofile.get_badge_display }}"></i>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ user.recommended_badge|title }}</td>
+                                        <td>{{ user.userprofile.get_badge_display }}</td>
+                                        <td>
+                                            {{ user.userprofile.days_active }} days active<br>
+                                            {{ user.userprofile.followers.count }} followers
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <button type="submit" class="btn btn-dark mt-3">
+                            <i class="bi bi-save"></i> Assign Selected Badge to Checked Users
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Transaction Ledger -->
+    <div class="card shadow">
+        <div class="card-header bg-dark text-white">
+            <h4><i class="bi bi-clock-history"></i> Transaction Ledger</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for transaction in transactions %}
+                        <tr>
+                            <td>{{ transaction.user.username }}</td>
+                            <td>{{ transaction.transaction_type }}</td>
+                            <td>{{ transaction.amount }}</td>
+                            <td>{{ transaction.status }}</td>
+                            <td>{{ transaction.timestamp|date:"M d, Y" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

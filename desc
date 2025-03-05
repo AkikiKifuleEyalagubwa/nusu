@@ -1,0 +1,2938 @@
+  Here’s a comprehensive description of the **NUSU Project**, including its main features, code structure, important files, and key components. This will serve as a reference for the project and can be used in the continuation prompt if needed.
+  
+  ---
+  
+  ### **NUSU Project Description**
+  
+  #### **Overview**
+  The NUSU App is a multi-functional platform combining financial transactions, social interactions, and community engagement. It allows users to manage tokens, interact with others, and participate in a social media-like feed. The app supports three user roles: **Regular Users**, **Agents**, and **Superusers (Admins)**.
+  
+  ---
+  
+  ### **Key Features**
+  
+  #### **1. User Management**
+  - **Custom User Model**: Supports roles (regular user, agent, superuser).
+  - **Profile Management**: Users can upload profile pictures, set bios, and earn badges (Bronze, Silver, Gold, Platinum).
+  - **Email Verification**: To be implemented for secure account creation.
+  - **Follow System**: Users can follow each other (to be implemented).
+  
+  #### **2. Transactions**
+  - **Token System**: Users can deposit, withdraw, and transfer tokens.
+  - **Withdrawal Process**: Secure withdrawal with PIN verification (valid for 10 minutes).
+  - **Exchange Rate**: Admins can set the token-to-UGX exchange rate.
+  - **Public Ledger**: All transactions are publicly visible for transparency.
+  
+  #### **3. Community Features (Newstand)**
+  - **Social Feed**: Users can create posts with text, images, or videos.
+  - **Interactions**: Like, comment, and repost functionality.
+  - **Infinite Scroll**: Feed loads more posts as the user scrolls.
+  - **Verified Badges**: Admins can verify users, displaying a badge on their profile.
+  
+  #### **4. Dashboard**
+  - **Role-Specific Views**:
+    - **Regular Users**: View balance, transaction history, and social feed.
+    - **Agents**: Process withdrawals and deposits for users.
+  - **Superusers**: Manage tokens, set exchange rates, and verify users.
+- **Balance Display**: Shows both token and UGX balances.
+
+#### **5. Security**
+- **CSRF Protection**: Ensures secure form submissions.
+- **Rate Limiting**: Prevents abuse of sensitive endpoints.
+- **Two-Factor Authentication**: To be implemented for enhanced security.
+
+#### **6. Notifications**
+- **Real-Time Alerts**: Notify users of successful transactions, new followers, and post interactions.
+- **Browser Notifications**: For now, notifications are browser-based (mobile money and OTP integration to be added later).
+
+---
+
+### **Code Tree**
+Here’s the structure of the project:
+
+```
+nusu/
+├── core/
+│   ├── settings.py          # Main project settings
+│   ├── urls.py              # Root URL configuration
+│   ├── asgi.py              # ASGI config
+│   └── wsgi.py              # WSGI config
+│
+├── users/
+│   ├── models.py            # CustomUser and UserProfile models
+│   ├── views.py             # User-related views (dashboard, profile, etc.)
+│   ├── forms.py             # User forms (registration, profile update)
+│   ├── urls.py              # User-specific URLs
+│   └── templates/           # User-related templates
+│
+├── transactions/
+│   ├── models.py            # Transaction and Withdrawal models
+│   ├── views.py             # Transaction-related views (deposit, withdraw, etc.)
+│   ├── forms.py             # Transaction forms
+│   ├── urls.py              # Transaction-specific URLs
+│   └── templates/           # Transaction-related templates
+│
+├── community/
+│   ├── models.py            # Post, Like, Comment models
+│   ├── views.py             # Community-related views (feed, posts, etc.)
+│   ├── forms.py             # Post and comment forms
+│   ├── urls.py              # Community-specific URLs
+│   └── templates/           # Community-related templates
+│
+├── static/
+│   ├── css/                 # Custom CSS files
+│   ├── js/                  # JavaScript files
+│   └── images/              # Default images (e.g., profile pictures)
+│
+├── templates/
+│   ├── base.html            # Base template for all pages
+│   ├── partials/            # Reusable template components
+│   └── ...                  # Other global templates
+│
+└── manage.py                # Django management script
+```
+
+---
+
+### **Important Files**
+
+#### **1. `users/models.py`**
+- Defines the `CustomUser` and `UserProfile` models.
+- Includes fields for roles, profile pictures, badges, and balances.
+
+#### **2. `transactions/models.py`**
+- Defines the `Transaction` model.
+- Tracks deposits, withdrawals, and transfers with statuses (pending, completed, expired).
+
+#### **3. `community/models.py`**
+- Defines the `Post`, `Like`, and `Comment` models.
+- Handles social interactions and feed functionality.
+
+#### **4. `core/settings.py`**
+- Contains project-wide settings (installed apps, middleware, database config, etc.).
+- Configures static and media file handling.
+
+#### **5. `base.html`**
+- The base template for all pages.
+- Includes navigation, footer, and global scripts/styles.
+
+#### **6. `transactions/views.py`**
+- Handles deposit, withdrawal, and transfer logic.
+- Includes PIN verification and balance checks.
+
+#### **7. `community/views.py`**
+- Manages the Newstand feed, post creation, likes, and comments.
+- Implements infinite scroll for the feed.
+
+---
+
+### **Key Components**
+
+#### **1. Token System**
+- Tokens are the primary currency.
+- Admins can send tokens to users.
+- Users can transfer tokens to each other.
+
+#### **2. Withdrawal Process**
+1. User initiates withdrawal and receives a PIN.
+2. Agent enters the user’s username, amount, and PIN.
+3. System verifies the PIN and processes the withdrawal.
+
+#### **3. Newstand Feed**
+- Infinite scroll for posts.
+- Users can create posts with text, images, or videos.
+- Like, comment, and repost functionality.
+
+#### **4. Dashboard**
+- Displays token and UGX balances.
+- Shows recent transactions and activity.
+
+#### **5. Security**
+- CSRF protection for forms.
+- Rate limiting for sensitive endpoints.
+- Two-factor authentication (to be implemented).
+
+---
+
+### **Next Steps**
+1. Implement the rate system (admin sets token-to-UGX exchange rate).
+2. Ensure proper display of token and UGX balances on the dashboard.
+3. Fix withdrawal error messages for wrong PIN, amount, or expired PIN.
+4. Add notifications for successful token transfers and withdrawals.
+5. Implement infinite scroll for the Newstand feed.
+6. Add verified user badges and follow functionality.
+7. Implement email verification for user registration.
+8. Add two-factor authentication for enhanced security.
+
+---
+
+### **Prompt for Continuation**
+When this chat reaches its length limit, continue with the following context:
+
+**Current Status:**
+- Fixed CSRF token error for like functionality.
+- Implemented comment functionality with proper AJAX handling.
+- Added rate and balance display (tokens and UGX).
+- Improved admin token sending feedback.
+- Enhanced withdrawal process with proper error handling and PIN validation.
+- Added a countdown timer for withdrawal PINs.
+
+**Next Tasks:**
+1. Implement the rate system (admin sets token-to-UGX exchange rate).
+2. Ensure proper display of token and UGX balances on the dashboard.
+3. Fix the withdrawal process to show proper error messages for wrong PIN, amount, or expired PIN.
+4. Add notifications for successful token transfers and withdrawals.
+5. Implement infinite scroll for the Newstand feed.
+6. Add verified user badges and follow functionality.
+7. Implement email verification for user registration.
+8. Add two-factor authentication for enhanced security.
+
+**Technical Context:**
+- Current codebase structure.
+- Database schema as documented.
+- Security measures in place (CSRF, rate limiting, etc.).
+- Existing models: `CustomUser`, `UserProfile`, `Transaction`, `Post`, `Like`, `Comment`.
+
+**Specific Requests:**
+- Provide complete implementation for the rate system.
+- Show how to display token and UGX balances on the dashboard.
+- Guide through fixing withdrawal error messages.
+- Implement notifications for token transfers and withdrawals.
+- Add infinite scroll to the Newstand feed.
+- Implement verified user badges and follow functionality.
+- Add email verification for user registration.
+- Implement two-factor authentication.
+
+---
+
+This description and prompt should help us continue seamlessly if the chat reaches its length limit. Let me know if you’d like to adjust anything!
+
+
+
+
+
+
+073516
+
+we are just done with the user and the transactions app others are still half way let me see you some important main files
+core settings file.
+# core/settings.py
+import os
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+SECRET_KEY = 'django-insecure-your-secret-key-here'  # Replace in production
+
+DEBUG = True
+
+ALLOWED_HOSTS = ['*']
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    
+    # Custom Apps
+    'users',
+    'tokens',
+    'transactions',
+    'streaks',
+    'community',
+    'widget_tweaks',
+]
+
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+ROOT_URLCONF = 'core.urls'
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [BASE_DIR / 'templates'],  # Add this line
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
+WSGI_APPLICATION = 'core.wsgi.application'
+
+# SQLite Database
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
+
+LANGUAGE_CODE = 'en-us'
+TIME_ZONE = 'Africa/Nairobi' 
+USE_I18N = True
+USE_TZ = True
+
+
+
+# Static files (CSS, JavaScript, Images)
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # For collecting static files
+STATICFILES_DIRS = [BASE_DIR / 'static']  # Additional directories (if needed)
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# Custom User Model
+AUTH_USER_MODEL = 'users.CustomUser'
+
+# File Upload Limits (5MB)
+FILE_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5MB
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# core/settings.py
+import logging
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
+}
+core urls file
+from django.contrib import admin
+from django.urls import path, include
+from . import views
+from django.conf import settings
+from django.conf.urls.static import static
+
+
+
+
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('users/', include('users.urls')),
+    path('transactions/', include('transactions.urls')),
+    path('', views.home, name='home'),  # Home page
+    path('community/', include('community.urls')),
+]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+users models file
+from django.db import models
+from django.contrib.auth.models import AbstractUser
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.core.files.base import ContentFile
+from PIL import Image, ImageDraw, ImageFont
+import io
+
+def create_default_profile_picture(username):
+    img = Image.new('RGB', (200, 200), color=(73, 109, 137))
+    draw = ImageDraw.Draw(img)
+    initials = (username[:2].upper() if len(username) >= 2 
+                else username[0].upper() + ' ')
+    
+    try:
+        font = ImageFont.truetype("arial.ttf", 80)
+    except:
+        font = ImageFont.load_default()
+    
+    text_width, text_height = draw.textsize(initials, font)
+    position = ((200 - text_width) // 2, (200 - text_height) // 2)
+    draw.text(position, initials, font=font, fill=(255, 255, 255))
+    
+    buffer = io.BytesIO()
+    img.save(buffer, format='PNG')
+    return ContentFile(buffer.getvalue())
+
+class CustomUser(AbstractUser):
+    is_agent = models.BooleanField(default=False)
+    is_verified = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return self.username
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    token_balance = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
+    bio = models.TextField(blank=True)
+    website = models.URLField(blank=True)
+    location = models.CharField(max_length=100, blank=True)
+    followers = models.ManyToManyField('self', symmetrical=False, blank=True)
+    verified = models.BooleanField(default=False)
+    ugx_balance = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+
+    BADGE_CHOICES = [
+        ('bronze', 'Bronze'),
+        ('silver', 'Silver'),
+        ('gold', 'Gold'),
+        ('platinum', 'Platinum')
+    ]
+    badge = models.CharField(max_length=20, choices=BADGE_CHOICES, default='bronze')
+
+    def __str__(self):
+        return f"{self.user.username}'s Profile"
+        
+    def get_ugx_balance(self):
+        from tokens.models import TokenRate  # Avoid circular import
+        rate = TokenRate.objects.last().rate if TokenRate.objects.exists() else 3800  # Default rate
+        return self.token_balance * rate
+
+@receiver(post_save, sender=CustomUser)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        profile = UserProfile.objects.create(user=instance)
+        profile.profile_picture.save(
+            f'{instance.username}_profile.png',
+            create_default_profile_picture(instance.username)
+        )
+        profile.save()
+users views file
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.db.models import Sum
+from django.urls import reverse
+from django.contrib.auth.hashers import make_password
+from .forms import CustomUserCreationForm, ProfileUpdateForm, CreateAgentForm, SendTokensForm
+from .models import CustomUser, UserProfile
+from tokens.models import TokenRate
+from transactions.models import Transaction
+
+@login_required
+def dashboard(request):
+    user = request.user
+    context = {}
+    
+    try:
+        profile = user.userprofile
+    except UserProfile.DoesNotExist:
+        # Create profile if it doesn't exist
+        profile = UserProfile.objects.create(user=user)
+        profile.profile_picture.save(
+            f'{user.username}_profile.png',
+            create_default_profile_picture(user.username)
+        )
+        profile.save()
+
+    # Get current exchange rate
+    current_rate = TokenRate.objects.last().rate if TokenRate.objects.exists() else 3800
+
+    if user.is_superuser:
+        # Superuser dashboard
+        context.update({
+            'total_users': CustomUser.objects.count(),
+            'total_agents': CustomUser.objects.filter(is_agent=True).count(),
+            'total_tokens': UserProfile.objects.aggregate(
+                total=Sum('token_balance')
+            )['total'] or 0,
+            'recent_transactions': Transaction.objects.all()[:10],
+            'send_tokens_url': reverse('users:send_tokens'),
+            'current_rate': current_rate,
+        })
+    else:
+        # Regular user/agent dashboard
+        context.update({
+            'profile': user.userprofile,
+            'transactions': Transaction.objects.filter(user=user).order_by('-timestamp')[:5],  # Fetch user's transactions
+            'token_balance': user.userprofile.token_balance,
+            'ugx_balance': user.userprofile.get_ugx_balance(),  # Use dynamic UGX balance
+            'request_withdrawal_url': reverse('transactions:request_withdrawal'),  # Updated URL
+            'current_rate': current_rate,
+        })
+        
+        if user.is_agent:
+            context.update({
+                'pending_withdrawals': Transaction.objects.filter(
+                    agent=user, 
+                    status='pending',
+                    transaction_type='withdrawal'
+                ),
+                'process_withdrawal_url': reverse('transactions:process_withdrawal'),  # Updated URL
+            })
+
+    return render(request, 'users/dashboard.html', context)
+
+@login_required
+def edit_profile(request):
+    if request.method == 'POST':
+        form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.userprofile)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard')
+    else:
+        form = ProfileUpdateForm(instance=request.user.userprofile)
+    
+    return render(request, 'users/edit_profile.html', {'form': form})
+
+def register(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('home')  # Redirect to home page after registration
+    else:
+        form = CustomUserCreationForm()
+    return render(request, 'users/register.html', {'form': form})
+
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+        else:
+            return render(request, 'users/login.html', {'error': 'Invalid credentials'})
+    return render(request, 'users/login.html')
+
+@login_required
+def create_agent(request):
+    if not request.user.is_superuser:
+        return redirect('dashboard')
+    
+    if request.method == 'POST':
+        form = CreateAgentForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password1']
+            
+            user = CustomUser.objects.create(
+                email=email,
+                password=make_password(password),
+                is_agent=True
+            )
+            UserProfile.objects.create(user=user)
+            messages.success(request, f"Agent {email} created successfully")
+            return redirect('dashboard')
+    else:
+        form = CreateAgentForm()
+    
+    return render(request, 'users/create_agent.html', {'form': form})
+
+@login_required
+def admin_balances(request):
+    if not request.user.is_superuser:
+        return redirect('dashboard')
+    
+    total_tokens = UserProfile.objects.aggregate(
+        Sum('token_balance')
+    )['token_balance__sum'] or 0
+    
+    current_rate = TokenRate.objects.last().rate if TokenRate.objects.exists() else 3800
+    total_ugx = total_tokens * current_rate
+    
+    context = {
+        'total_tokens': total_tokens,
+        'total_ugx': total_ugx,
+        'user_count': CustomUser.objects.count(),
+        'agent_count': CustomUser.objects.filter(is_agent=True).count(),
+    }
+    
+    return render(request, 'users/admin_balances.html', context)
+
+@login_required
+def send_tokens(request):
+    if not request.user.is_superuser:
+        return redirect('dashboard')
+    
+    if request.method == 'POST':
+        form = SendTokensForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            amount = form.cleaned_data['amount']
+            
+            try:
+                user = CustomUser.objects.get(username=username)
+                profile = user.userprofile
+                profile.token_balance += amount
+                profile.save()
+                
+                Transaction.objects.create(
+                    user=user,
+                    agent=request.user,
+                    amount=amount,
+                    transaction_type='deposit',
+                    status='completed'
+                )
+                
+                messages.success(request, f"Sent {amount} tokens to {username}")
+            except CustomUser.DoesNotExist:
+                messages.error(request, "User not found")
+    else:
+        form = SendTokensForm()
+    
+    return render(request, 'users/send_tokens.html', {'form': form})
+
+@login_required
+def transaction_receipt(request, tx_id):
+    transaction = get_object_or_404(Transaction, id=tx_id, user=request.user)
+    return render(request, 'users/receipt.html', {'transaction': transaction})
+
+def user_logout(request):
+    logout(request)
+    return redirect('home')
+users forms file
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from .models import CustomUser,UserProfile
+
+class ProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['profile_picture', 'bio']
+
+
+
+class CustomUserCreationForm(UserCreationForm):
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'email', 'password1', 'password2']
+        
+class CreateAgentForm(forms.Form):
+    email = forms.EmailField()
+    password1 = forms.CharField(widget=forms.PasswordInput)
+    password2 = forms.CharField(widget=forms.PasswordInput)
+
+class SendTokensForm(forms.Form):
+    username = forms.CharField()
+    amount = forms.DecimalField(max_digits=12, decimal_places=2, min_value=1)
+users urls file
+from django.urls import path
+from . import views
+
+app_name = 'users'
+
+urlpatterns = [
+  path('admin-balances/', views.admin_balances, name='admin_balances'),
+    path('register/', views.register, name='register'),
+    path('login/', views.user_login, name='login'),
+    path('logout/', views.user_logout, name='logout'),  # Add this line
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('profile/edit/', views.edit_profile, name='edit_profile'),
+   path('create-agent/', views.create_agent, name='create_agent'),
+    path('send-tokens/', views.send_tokens, name='send_tokens'),
+    path('transaction/<int:tx_id>/receipt/', views.transaction_receipt, name='transaction_receipt'),
+]
+
+
+
+    
+    
+transactions models file
+from django.db import models
+from django.contrib.auth import get_user_model
+from django.utils import timezone
+from django.core.exceptions import ValidationError
+import hashlib
+
+User = get_user_model()
+
+class WithdrawalRequest(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('completed', 'Completed'),
+        ('expired', 'Expired'),
+        ('failed', 'Failed'),
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=12, decimal_places=2)
+    pin_hash = models.CharField(max_length=128)
+    expiry = models.DateTimeField()
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def clean(self):
+        if self.amount <= 0:
+            raise ValidationError("Amount must be positive.")
+        if self.user.userprofile.token_balance < self.amount:
+            raise ValidationError("Insufficient balance.")
+
+    def is_expired(self):
+        return timezone.now() > self.expiry
+
+    def __str__(self):
+        return f"Withdrawal Request #{self.id} - {self.user.username}"
+
+class Transaction(models.Model):
+    user = models.ForeignKey(
+        User, 
+        on_delete=models.CASCADE,
+        related_name='user_transactions'  # Unique related name
+    )
+    agent = models.ForeignKey(
+        User, 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True,
+        related_name='agent_transactions'  # Unique related name
+    )
+    amount = models.DecimalField(max_digits=12, decimal_places=2)
+    transaction_type = models.CharField(max_length=20, default='withdrawal')
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Transaction #{self.id} - {self.user.username}"
+transactions views file
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib import messages
+from django.utils import timezone
+from datetime import timedelta
+from django.db.models import Q
+from django.core.paginator import Paginator
+from django.core.exceptions import ValidationError
+from .models import Transaction
+from .forms import AgentDepositForm, AgentWithdrawForm
+from users.models import CustomUser, UserProfile
+from tokens.models import TokenRate
+from django.views.generic.detail import DetailView
+import random
+from decimal import Decimal
+import logging
+import hashlib
+import secrets
+from .models import WithdrawalRequest, Transaction, User
+from django.db import transaction  # Import Django's transaction module
+
+
+
+
+# User initiates withdrawal
+@login_required
+def request_withdrawal(request):
+    if request.method == 'POST':
+        amount = request.POST.get('amount')
+        try:
+            amount = float(amount)
+            if amount <= 0:
+                raise ValueError("Invalid amount")
+
+            # Generate PIN and hash
+            pin = ''.join(secrets.choice('0123456789') for _ in range(6))
+            pin_hash = hashlib.sha256(pin.encode()).hexdigest()
+            expiry = timezone.now() + timedelta(minutes=10)
+
+            # Create withdrawal request
+            withdrawal = WithdrawalRequest.objects.create(
+                user=request.user,
+                amount=amount,
+                pin_hash=pin_hash,
+                expiry=expiry
+            )
+
+            # Show PIN to user (simulate SMS/email)
+            return render(request, 'transactions/withdrawal_pin.html', {
+                'pin': pin,
+                'expiry': expiry,
+            })
+
+        except (ValueError, ValidationError) as e:
+            messages.error(request, str(e))
+
+    return render(request, 'transactions/request_withdrawal.html')
+
+# transactions/views.py (updated snippet)
+@user_passes_test(lambda u: u.is_agent or u.is_superuser)
+def process_withdrawal(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        amount = request.POST.get('amount')
+        pin = request.POST.get('pin')
+
+        try:
+            user = User.objects.get(username=username)
+            amount = float(amount)
+            pin_hash = hashlib.sha256(pin.encode()).hexdigest()
+
+            # Find matching withdrawal request
+            withdrawal = WithdrawalRequest.objects.filter(
+                user=user,
+                amount=amount,
+                pin_hash=pin_hash,
+                status='pending'
+            ).first()
+
+            if not withdrawal:
+                messages.error(request, "Invalid PIN, amount, or username.")
+                return redirect('transactions:process_withdrawal')
+
+            # Use Django's transaction.atomic() correctly
+            with transaction.atomic():  # Refers to the imported module
+                if withdrawal.is_expired():
+                    withdrawal.status = 'expired'
+                    withdrawal.save()
+                    messages.error(request, "PIN expired.")
+                    return redirect('transactions:process_withdrawal')
+
+                if user.userprofile.token_balance < withdrawal.amount:
+                    messages.error(request, "Insufficient balance.")
+                    return redirect('transactions:process_withdrawal')
+
+                # Deduct balance and mark as completed
+                user.userprofile.token_balance -= withdrawal.amount
+                user.userprofile.save()
+
+                withdrawal.status = 'completed'
+                withdrawal.save()
+
+                # Create transaction record (renamed variable)
+                tx = Transaction.objects.create(  # Changed to 'tx'
+                    user=user,
+                    agent=request.user,
+                    amount=withdrawal.amount
+                )
+
+                messages.success(request, "Withdrawal processed successfully!")
+                return redirect('transactions:transaction_receipt', pk=tx.id)  # Use 'tx'
+
+        except User.DoesNotExist:
+            messages.error(request, "User not found.")
+        except (ValueError, ValidationError) as e:
+            messages.error(request, str(e))
+
+    return render(request, 'transactions/process_withdrawal.html')
+
+
+# transactions/views.py (updated snippet)
+class TransactionReceiptView(DetailView):
+    """
+    Display the receipt for a completed transaction.
+    """
+    model = Transaction
+    template_name = 'transactions/receipt.html'
+    context_object_name = 'transaction'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['printable'] = self.request.GET.get('print', False)
+        return context
+
+    def get_template_names(self):
+        if self.request.GET.get('print'):
+            return ['transactions/receipt_print.html']
+        return [self.template_name]
+
+
+@user_passes_test(lambda u: u.is_agent or u.is_superuser)
+def agent_deposit(request):
+    """Allow agents to deposit tokens for users."""
+    if request.method == 'POST':
+        form = AgentDepositForm(request.POST)
+        if form.is_valid():
+            user_identifier = form.cleaned_data['user_identifier']
+            cash_amount = form.cleaned_data['amount']
+            
+            # Find user by username or ID
+            try:
+                user = CustomUser.objects.get(username=user_identifier)
+            except CustomUser.DoesNotExist:
+                try:
+                    user = CustomUser.objects.get(id=int(user_identifier))
+                except (ValueError, CustomUser.DoesNotExist):
+                    form.add_error('user_identifier', 'User not found.')
+                    return render(request, 'transactions/agent_deposit.html', {'form': form})
+            
+            # Convert cash to tokens using the current rate
+            current_rate = TokenRate.objects.last().rate if TokenRate.objects.exists() else 3800
+            tokens = cash_amount / current_rate
+            
+            # Update user balance
+            user.userprofile.token_balance += tokens
+            user.userprofile.save()
+            
+            # Record transaction (remove 'status' argument)
+            transaction = Transaction.objects.create(
+                user=user,
+                agent=request.user,
+                amount=tokens,  # Store tokens, not cash
+                transaction_type='deposit',  # Set transaction type
+            )
+            
+            messages.success(request, f"Deposited {tokens} tokens for {user.username}")
+            return redirect('transactions:transaction_receipt', pk=transaction.pk)
+    else:
+        form = AgentDepositForm()
+    return render(request, 'transactions/agent_deposit.html', {'form': form})
+
+# Public Ledger
+def public_ledger(request):
+    """Display all transactions in a public ledger."""
+    query = request.GET.get('q')
+    transactions = Transaction.objects.all().order_by('-timestamp')
+
+    if query:
+        transactions = transactions.filter(
+            Q(id__icontains=query) |
+            Q(user__username__icontains=query) |
+            Q(agent__username__icontains=query)
+        )
+
+    paginator = Paginator(transactions, 20)  # Show 20 transactions per page
+    page_number = request.GET.get('page')
+    transactions = paginator.get_page(page_number)
+
+    return render(request, 'transactions/public_ledger.html', {'transactions': transactions})
+
+# Token Transfer
+@login_required
+def transfer_tokens(request):
+    """Allow users to transfer tokens to other users."""
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        amount = request.POST.get('amount')
+        
+        try:
+            amount = float(amount)
+            if amount <= 0:
+                raise ValueError("Amount must be positive")
+                
+            recipient = CustomUser.objects.get(username=username)
+            sender_profile = request.user.userprofile
+            recipient_profile = recipient.userprofile
+            
+            if sender_profile.token_balance >= amount:
+                sender_profile.token_balance -= amount
+                recipient_profile.token_balance += amount
+                
+                Transaction.objects.create(
+                    user=request.user,
+                    amount=amount,
+                    transaction_type='transfer',
+                    status='completed',
+                    recipient=recipient
+                )
+                
+                sender_profile.save()
+                recipient_profile.save()
+                messages.success(request, f"Transferred {amount} tokens to {username}")
+            else:
+                messages.error(request, "Insufficient balance")
+                
+        except CustomUser.DoesNotExist:
+            messages.error(request, "User not found")
+        except ValueError:
+            messages.error(request, "Invalid amount")
+    
+    return render(request, 'transactions/transfer_tokens.html')
+    
+    
+    
+def transaction_detail(request, pk):
+    """Display details of a single transaction."""
+    transaction = get_object_or_404(Transaction, pk=pk)
+    return render(request, 'transactions/transaction_detail.html', {'transaction': transaction})
+transactions urls file
+# transactions/urls.py
+from django.urls import path
+from .views import (
+    request_withdrawal, 
+    process_withdrawal, 
+    TransactionReceiptView,
+    agent_deposit,
+    public_ledger,
+    transfer_tokens,
+    transaction_detail,
+)
+
+app_name = 'transactions'
+
+urlpatterns = [
+    path('request-withdrawal/', request_withdrawal, name='request_withdrawal'),
+    path('process-withdrawal/', process_withdrawal, name='process_withdrawal'),
+    path('receipt/<int:pk>/', TransactionReceiptView.as_view(), name='transaction_receipt'),
+    path('agent/deposit/', agent_deposit, name='agent_deposit'),
+    path('ledger/', public_ledger, name='public_ledger'),
+    path('transfer/', transfer_tokens, name='transfer_tokens'),
+    path('ledger/transaction/<int:pk>/', transaction_detail, name='transaction_detail'),
+]
+transactions forms file
+from django import forms
+from users.models import CustomUser
+from .models import Transaction
+
+class AgentWithdrawForm(forms.Form):
+    user_identifier = forms.CharField(label="Username or ID", max_length=150)
+    amount = forms.DecimalField(label="Amount (Tokens)", max_digits=12, decimal_places=2)
+
+
+class AgentDepositForm(forms.Form):
+    user_identifier = forms.CharField(
+        label="Username or ID",
+        max_length=150,
+        help_text="Enter the username or ID of the user."
+    )
+    amount = forms.DecimalField(
+        label="Cash Amount (UGX)",
+        min_value=1000,  # Minimum deposit amount
+        max_digits=12,
+        decimal_places=2
+    )
+
+class AgentWithdrawForm(forms.Form):
+    user_identifier = forms.CharField(
+        label="Username or ID",
+        max_length=150,
+        help_text="Enter the username or ID of the user."
+    )
+    amount = forms.DecimalField(
+        label="Token Amount",
+        min_value=1,  # Minimum token withdrawal
+        max_digits=12,
+        decimal_places=2
+    )
+
+community models file
+# community/models.py
+from django.db import models
+from django.utils import timezone
+from users.models import CustomUser
+
+class Post(models.Model):
+    user = models.ForeignKey('users.CustomUser', on_delete=models.CASCADE)
+    content = models.TextField()
+    image = models.ImageField(upload_to='posts/images/', blank=True, null=True)
+    video = models.FileField(upload_to='posts/videos/', blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)  # Add this line
+    parent_post = models.ForeignKey('self', on_delete=models.CASCADE, 
+                                  null=True, blank=True, related_name='reposts')
+    
+    class Meta:
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f"Post by {self.user.username} - {self.created_at}"
+
+class Like(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        unique_together = ('user', 'post')
+
+class Comment(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    content = models.TextField()
+    created_at = models.DateTimeField(default=timezone.now)
+    parent_comment = models.ForeignKey('self', on_delete=models.CASCADE, 
+                                     null=True, blank=True, related_name='replies')
+
+    class Meta:
+        ordering = ['created_at']
+
+    def __str__(self):
+        return f"Comment by {self.user.username} on {self.post}"
+community views file
+# community/views.py
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.core.paginator import Paginator
+from .models import Post, Like, Comment
+from .forms import PostForm
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
+
+
+
+
+
+def newstand(request):
+    posts = Post.objects.all().order_by('-created_at')
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return JsonResponse({
+            'posts': [{
+                'id': post.id,
+                'content': post.content,
+                'user': post.user.username,
+                'created_at': post.created_at.strftime('%b %d, %Y %I:%M %p'),
+                'image': post.image.url if post.image else None,
+                'video': post.video.url if post.video else None,
+                'like_count': post.likes.count(),
+                'comment_count': post.comments.count(),
+            } for post in page_obj],
+            'has_next': page_obj.has_next()
+        })
+    
+    return render(request, 'community/newstand.html', {'posts': page_obj})
+
+@login_required
+def create_post(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user = request.user
+            post.save()
+            return redirect('community:newstand')
+    else:
+        form = PostForm()
+    return render(request, 'community/create_post.html', {'form': form})
+
+
+@csrf_exempt
+@login_required
+def like_post(request, post_id):
+    if request.method == 'POST':
+        post = get_object_or_404(Post, id=post_id)
+        like, created = Like.objects.get_or_create(user=request.user, post=post)
+        
+        if not created:
+            like.delete()
+        
+        return JsonResponse({
+            'liked': created,
+            'like_count': post.likes.count()
+        })
+    return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
+# community/views.py
+@csrf_exempt
+@login_required
+def add_comment(request, post_id):
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        parent_id = request.POST.get('parent_id')
+        
+        if content:
+            post = get_object_or_404(Post, id=post_id)
+            comment = Comment.objects.create(
+                user=request.user,
+                post=post,
+                content=content,
+                parent_comment_id=parent_id if parent_id else None
+            )
+            
+            return JsonResponse({
+                'success': True,
+                'comment': {
+                    'id': comment.id,
+                    'content': comment.content,
+                    'user': comment.user.username,
+                    'created_at': comment.created_at.strftime('%b %d, %Y %I:%M %p'),
+                    'parent_id': comment.parent_comment_id
+                }
+            })
+    
+    return JsonResponse({'success': False}, status=400)
+community forms file
+# community/forms.py
+from django import forms
+from .models import Post
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['content', 'image', 'video']
+        widgets = {
+            'content': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': "What's happening?"
+            }),
+            'image': forms.FileInput(attrs={
+                'class': 'form-control',
+                'accept': 'image/*'
+            }),
+            'video': forms.FileInput(attrs={
+                'class': 'form-control',
+                'accept': 'video/*'
+            })
+        }
+community urls file
+# community/urls.py
+from django.urls import path
+from . import views
+
+app_name = 'community'
+
+urlpatterns = [
+    path('', views.newstand, name='newstand'),
+    path('create/', views.create_post, name='create_post'),
+    path('like/<int:post_id>/', views.like_post, name='like_post'),
+    path('comment/<int:post_id>/', views.add_comment, name='add_comment'),
+]
+base html file
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NUSU App</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    
+    <!-- Print CSS -->
+    <link rel="stylesheet" href="{% static 'css/print.css' %}" media="print">
+</head>
+<body class="bg-light d-flex flex-column min-vh-100">
+    <!-- Navigation -->
+    <header class="border-bottom">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
+            <div class="container">
+                <!-- Brand -->
+                <a class="navbar-brand fw-bold" href="{% url 'home' %}">
+                    <i class="bi bi-piggy-bank me-2"></i>NUSU App
+                </a>
+                
+                <!-- Toggler -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <!-- Collapsible Content -->
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <div class="navbar-nav ms-auto">
+                        <!-- Community Link -->
+                        <a class="nav-link" href="{% url 'community:newstand' %}">
+                            <i class="bi bi-newspaper"></i> Newstand
+                        </a>
+                        
+                        <!-- Authenticated User Menu -->
+                        {% if user.is_authenticated %}
+                            <div class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" 
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-person-circle"></i> {{ user.username }}
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <!-- Dashboard -->
+                                    <li><a class="dropdown-item" href="{% url 'users:dashboard' %}">
+                                        <i class="bi bi-speedometer2"></i> Dashboard
+                                    </a></li>
+                                    
+                                    <!-- Create Post -->
+                                    <li><a class="dropdown-item" href="{% url 'community:create_post' %}">
+                                        <i class="bi bi-pencil-square"></i> Create Post
+                                    </a></li>
+                                    
+                                    <!-- Edit Profile -->
+                                    <li><a class="dropdown-item" href="{% url 'users:edit_profile' %}">
+                                        <i class="bi bi-gear"></i> Edit Profile
+                                    </a></li>
+                                    
+                                    <!-- Transactions -->
+                                    {% if user.is_agent or user.is_superuser %}
+                                    <li><a class="dropdown-item" href="{% url 'transactions:agent_deposit' %}">
+                                        <i class="bi bi-cash-coin"></i> Deposit
+                                    </a></li>
+                                    <li><a class="dropdown-item" href="{% url 'transactions:process_withdrawal' %}">
+                                        <i class="bi bi-wallet2"></i> Withdraw
+                                    </a></li>
+                                    {% endif %}
+                                    
+                                    <!-- Divider -->
+                                    <li><hr class="dropdown-divider"></li>
+                                    
+                                    <!-- Logout -->
+                                    <li><a class="dropdown-item text-danger" href="{% url 'users:logout' %}">
+                                        <i class="bi bi-box-arrow-left"></i> Logout
+                                    </a></li>
+                                </ul>
+                            </div>
+                        {% else %}
+                            <!-- Login/Register Links -->
+                            <a class="nav-link" href="{% url 'users:login' %}">
+                                <i class="bi bi-box-arrow-in-right"></i> Login
+                            </a>
+                            <a class="nav-link" href="{% url 'users:register' %}">
+                                <i class="bi bi-person-plus"></i> Register
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mt-5 flex-grow-1">
+        {% block content %}
+        <!-- Content will be injected here -->
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-top py-3 mt-auto">
+        <div class="container text-center text-muted">
+            <p class="mb-0">🚀 Built by kifule | © 2025 NUSU </p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="{% static 'js/main.js' %}"></script>
+    
+    {% block extra_scripts %}
+    <!-- Additional scripts can be injected here -->
+    {% endblock %}
+</body>
+</html>
+style css
+/* Custom Styles */
+body {
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+}
+
+.navbar-brand i {
+    font-size: 1.8rem;
+    vertical-align: middle;
+}
+
+.profile-picture {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border: 3px solid #2A3F54;
+}
+
+.card {
+    border-radius: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+}
+
+.btn-dark {
+    background-color: #2A3F54;
+    padding: 12px;
+    font-size: 1.1rem;
+}
+
+.btn-dark:hover {
+    background-color: #1a2b3c;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .navbar-nav {
+        margin-top: 1rem;
+    }
+    
+    .profile-picture {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .card {
+        margin-bottom: 1rem;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .navbar, .footer, .btn {
+        display: none;
+    }
+    
+    .card {
+        border: none;
+        box-shadow: none;
+        margin: 0;
+        padding: 0;
+    }
+}
+dashboard html file
+<!-- templates/users/dashboard.html -->
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title mb-4"><i class="bi bi-speedometer2"></i> Dashboard</h2>
+                    
+                    <!-- Admin Actions -->
+                    {% if user.is_superuser %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5><i class="bi bi-shield-lock"></i> Admin Actions</h5>
+                            <div class="d-grid gap-2">
+                                <a href="{% url 'users:create_agent' %}" class="btn btn-dark">
+                                    <i class="bi bi-person-plus"></i> Create Agent
+                                </a>
+                                <a href="{% url 'users:send_tokens' %}" class="btn btn-dark">
+                                    <i class="bi bi-send"></i> Send Tokens
+                                </a>
+                                <a href="{% url 'users:admin_balances' %}" class="btn btn-dark">
+                                    <i class="bi bi-cash-stack"></i> System Balances
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Balances -->
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5><i class="bi bi-wallet2"></i> Your Balances</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="lead">Token Balance: {{ token_balance }} NSU</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="lead">UGX Balance: {{ profile.get_ugx_balance|floatformat:2 }} UGX</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Transfer Tokens (for normal users) -->
+                    {% if not user.is_superuser and not user.is_agent %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5><i class="bi bi-arrow-left-right"></i> Transfer Tokens</h5>
+                            <div class="d-grid">
+                                <a href="{% url 'transactions:transfer_tokens' %}" class="btn btn-dark">
+                                    <i class="bi bi-send"></i> Transfer Tokens
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Withdraw Funds (for normal users) -->
+                    {% if not user.is_agent and not user.is_superuser %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5><i class="bi bi-cash"></i> Withdraw Funds</h5>
+                            <div class="d-grid">
+                                <a href="{% url 'transactions:request_withdrawal' %}" class="btn btn-dark">
+                                    <i class="bi bi-wallet2"></i> Request Withdrawal
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Process Withdrawals (for agents) -->
+                    {% if user.is_agent or user.is_superuser %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5><i class="bi bi-cash-coin"></i> Process Withdrawals</h5>
+                            <div class="d-grid">
+                                <a href="{% url 'transactions:process_withdrawal' %}" class="btn btn-dark">
+                                    <i class="bi bi-wallet2"></i> Process Withdrawal
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Recent Transactions -->
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5><i class="bi bi-clock-history"></i> Recent Transactions</h5>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Type</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for tx in transactions %}
+                                    <tr>
+                                        <td>{{ tx.transaction_type }}</td>
+                                        <td>{{ tx.amount }}</td>
+                                        <td>{{ tx.status }}</td>
+                                        <td>{{ tx.timestamp|date:"M d, Y" }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Pending Withdrawals (for agents) -->
+                    {% if user.is_agent and pending_withdrawals %}
+                    <div class="card">
+                        <div class="card-body">
+                            <h5><i class="bi bi-exclamation-triangle"></i> Pending Withdrawals</h5>
+                            <div class="list-group">
+                                {% for withdrawal in pending_withdrawals %}
+                                <div class="list-group-item">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <strong>{{ withdrawal.user.username }}</strong>
+                                            <br>
+                                            <small>Amount: {{ withdrawal.amount }}</small>
+                                        </div>
+                                        <span class="badge bg-danger">Pending</span>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
+don't code or give explanation just give me the file structure of what you see in the project 
+okay to note all html is in the templates folder with their app names,I was working on the community app dealing with the feed as in the x formerly Twitter and this is the code we had done just get it I will tell you when to code.
+community models file
+# community/models.py
+from django.db import models
+from users.models import CustomUser
+
+class Tweet(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    content = models.TextField(max_length=280)
+    image = models.ImageField(upload_to='tweets/images/', blank=True, null=True)
+    video = models.FileField(upload_to='tweets/videos/', blank=True, null=True)
+    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)
+    likes = models.ManyToManyField(CustomUser, related_name='liked_tweets', blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+        
+    def __str__(self):
+        return f"Tweet by {self.user.username}"
+    
+    def is_reply(self):
+        return self.parent is not None
+    
+    def get_replies(self):
+        return Tweet.objects.filter(parent=self)
+community views file
+# community/views.py
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from .models import Tweet
+from .forms import TweetForm
+
+def feed(request):
+    tweets = Tweet.objects.filter(parent=None).order_by('-created_at')
+    return render(request, 'community/feed.html', {'tweets': tweets})
+
+@login_required
+def tweet_detail(request, tweet_id):
+    tweet = get_object_or_404(Tweet, id=tweet_id)
+    replies = tweet.get_replies().order_by('-created_at')
+    return render(request, 'community/tweet_detail.html', {
+        'tweet': tweet,
+        'replies': replies
+    })
+
+@login_required
+def create_tweet(request, tweet_id=None):
+    if request.method == 'POST':
+        form = TweetForm(request.POST, request.FILES)
+        if form.is_valid():
+            tweet = form.save(commit=False)
+            tweet.user = request.user
+            if tweet_id:
+                tweet.parent = get_object_or_404(Tweet, id=tweet_id)
+            tweet.save()
+            return redirect('community:tweet_detail', tweet_id=tweet.id)
+    else:
+        form = TweetForm()
+    return render(request, 'community/compose.html', {'form': form})
+
+@login_required
+def toggle_like(request, tweet_id):
+    tweet = get_object_or_404(Tweet, id=tweet_id)
+    if request.user in tweet.likes.all():
+        tweet.likes.remove(request.user)
+        liked = False
+    else:
+        tweet.likes.add(request.user)
+        liked = True
+    return JsonResponse({
+        'success': True,
+        'liked': liked,
+        'like_count': tweet.likes.count()
+    })
+    
+
+def tweet_detail(request, tweet_id):
+    tweet = get_object_or_404(Tweet, id=tweet_id)
+    replies = tweet.get_replies().order_by('-created_at')
+    return render(request, 'community/tweet_detail.html', {
+        'tweet': tweet,
+        'replies': replies
+    })
+community urls file
+# community/urls.py
+from django.urls import path
+from . import views
+
+app_name = 'community'
+
+urlpatterns = [
+    path('', views.feed, name='feed'),
+    path('tweet/<int:tweet_id>/', views.tweet_detail, name='tweet_detail'),
+    path('tweet/<int:tweet_id>/reply/', views.create_tweet, name='reply_tweet'),
+    path('tweet/<int:tweet_id>/like/', views.toggle_like, name='toggle_like'),
+    path('compose/', views.create_tweet, name='create_tweet'),  # Add this line
+]
+community forms file
+# community/forms.py
+from django import forms
+from .models import Tweet
+
+class TweetForm(forms.ModelForm):
+    class Meta:
+        model = Tweet
+        fields = ['content', 'image', 'video']
+        widgets = {
+            'content': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': "What's happening?"
+            }),
+            'image': forms.FileInput(attrs={
+                'class': 'form-control',
+                'accept': 'image/*'
+            }),
+            'video': forms.FileInput(attrs={
+                'class': 'form-control',
+                'accept': 'video/*'
+            })
+        }
+users models file
+from django.db import models
+from django.contrib.auth.models import AbstractUser
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.core.files.base import ContentFile
+from PIL import Image, ImageDraw, ImageFont
+import io
+
+# Function to create a default profile picture
+def create_default_profile_picture(username):
+    img = Image.new('RGB', (200, 200), color=(73, 109, 137))  # Background color
+    draw = ImageDraw.Draw(img)
+    initials = (username[:2].upper() if len(username) >= 2 
+                else username[0].upper() + ' ')  # Use first 2 letters of username
+    
+    try:
+        font = ImageFont.truetype("arial.ttf", 80)  # Try to load a font
+    except:
+        font = ImageFont.load_default()  # Fallback to default font
+    
+    text_width, text_height = draw.textsize(initials, font)
+    position = ((200 - text_width) // 2, (200 - text_height) // 2)  # Center the text
+    draw.text(position, initials, font=font, fill=(255, 255, 255))  # White text
+    
+    buffer = io.BytesIO()
+    img.save(buffer, format='PNG')
+    return ContentFile(buffer.getvalue())  # Return the image as a ContentFile
+
+# Custom User Model
+class CustomUser(AbstractUser):
+    is_agent = models.BooleanField(default=False)
+    is_verified = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return self.username
+
+# User Profile Model
+class UserProfile(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    token_balance = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    profile_picture = models.ImageField(
+        upload_to='profile_pics/',
+        default='profile_pics/default.png'  # Default profile picture
+    )
+    bio = models.TextField(blank=True)
+    website = models.URLField(blank=True)
+    location = models.CharField(max_length=100, blank=True)
+    followers = models.ManyToManyField('self', symmetrical=False, blank=True, related_name='following')
+    verified = models.BooleanField(default=False)
+    ugx_balance = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+
+    # Badge Choices
+    BADGE_CHOICES = [
+        ('bronze', 'Bronze'),
+        ('silver', 'Silver'),
+        ('gold', 'Gold'),
+        ('platinum', 'Platinum')
+    ]
+    badge = models.CharField(max_length=20, choices=BADGE_CHOICES, default='bronze')
+
+    def __str__(self):
+        return f"{self.user.username}'s Profile"
+        
+    # Calculate UGX balance based on token balance and exchange rate
+    def get_ugx_balance(self):
+        from tokens.models import TokenRate  # Avoid circular import
+        rate = TokenRate.objects.last().rate if TokenRate.objects.exists() else 3800  # Default rate
+        return self.token_balance * rate
+
+# Notification Model
+class Notification(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='notifications')
+    message = models.CharField(max_length=255)
+    transaction = models.ForeignKey('transactions.Transaction', on_delete=models.SET_NULL, null=True, blank=True)
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Notification for {self.user.username}: {self.message}"
+
+# Signal to create a user profile when a new user is created
+@receiver(post_save, sender=CustomUser)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        profile = UserProfile.objects.create(user=instance)
+        
+        # Save a default profile picture if none exists
+        if not profile.profile_picture:
+            profile.profile_picture.save(
+                f'{instance.username}_profile.png',
+                create_default_profile_picture(instance.username)
+            )
+        profile.save()
+        
+        
+  
+users views file
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
+from django.http import JsonResponse
+from django.contrib import messages
+from django.db.models import Sum
+from django.urls import reverse
+from django.contrib.auth.hashers import make_password
+from .forms import CustomUserCreationForm, ProfileUpdateForm, CreateAgentForm, SendTokensForm
+from .models import CustomUser, UserProfile, Notification
+from tokens.models import TokenRate
+from transactions.models import Transaction
+from django.contrib.auth import authenticate, login, logout
+from community.models import Tweet  
+
+
+@login_required
+def dashboard(request):
+    user = request.user
+    context = {}
+    
+    try:
+        profile = user.userprofile
+    except UserProfile.DoesNotExist:
+        # Create profile if it doesn't exist
+        profile = UserProfile.objects.create(user=user)
+        profile.profile_picture.save(
+            f'{user.username}_profile.png',
+            create_default_profile_picture(user.username)
+        )
+        profile.save()
+
+    # Get current exchange rate
+    current_rate = TokenRate.objects.last().rate if TokenRate.objects.exists() else 3800
+
+    if user.is_superuser:
+        # Superuser dashboard
+        context.update({
+            'total_users': CustomUser.objects.count(),
+            'total_agents': CustomUser.objects.filter(is_agent=True).count(),
+            'total_tokens': UserProfile.objects.aggregate(
+                total=Sum('token_balance')
+            )['total'] or 0,
+            'recent_transactions': Transaction.objects.all()[:10],
+            'send_tokens_url': reverse('users:send_tokens'),
+            'current_rate': current_rate,
+        })
+    else:
+        # Regular user/agent dashboard
+        context.update({
+            'profile': user.userprofile,
+            'transactions': Transaction.objects.filter(user=user).order_by('-timestamp')[:5],  # Fetch user's transactions
+            'token_balance': user.userprofile.token_balance,
+            'ugx_balance': user.userprofile.get_ugx_balance(),  # Use dynamic UGX balance
+            'request_withdrawal_url': reverse('transactions:request_withdrawal'),  # Updated URL
+            'current_rate': current_rate,
+        })
+        
+        if user.is_agent:
+            context.update({
+                'pending_withdrawals': Transaction.objects.filter(
+                    agent=user, 
+                    status='pending',
+                    transaction_type='withdrawal'
+                ),
+                'process_withdrawal_url': reverse('transactions:process_withdrawal'),  # Updated URL
+            })
+
+    return render(request, 'users/dashboard.html', context)
+
+
+
+@login_required
+def edit_profile(request):
+    if request.method == 'POST':
+        form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.userprofile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Profile updated successfully!")
+            return redirect('users:user_profile', username=request.user.username)
+    else:
+        form = ProfileUpdateForm(instance=request.user.userprofile)
+    
+    # Fetch the user's tweets
+    tweets = Tweet.objects.filter(user=request.user).order_by('-created_at')
+    
+    return render(request, 'users/edit_profile.html', {
+        'form': form,
+        'tweets': tweets  # Pass tweets to the template
+    })
+
+
+
+def register(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('home')  # Redirect to home page after registration
+    else:
+        form = CustomUserCreationForm()
+    return render(request, 'users/register.html', {'form': form})
+
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+        else:
+            return render(request, 'users/login.html', {'error': 'Invalid credentials'})
+    return render(request, 'users/login.html')
+
+@login_required
+def create_agent(request):
+    if not request.user.is_superuser:
+        return redirect('dashboard')
+    
+    if request.method == 'POST':
+        form = CreateAgentForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password1']
+            
+            user = CustomUser.objects.create(
+                email=email,
+                password=make_password(password),
+                is_agent=True
+            )
+            UserProfile.objects.create(user=user)
+            messages.success(request, f"Agent {email} created successfully")
+            return redirect('dashboard')
+    else:
+        form = CreateAgentForm()
+    
+    return render(request, 'users/create_agent.html', {'form': form})
+
+@login_required
+def admin_balances(request):
+    if not request.user.is_superuser:
+        return redirect('dashboard')
+    
+    total_tokens = UserProfile.objects.aggregate(
+        Sum('token_balance')
+    )['token_balance__sum'] or 0
+    
+    current_rate = TokenRate.objects.last().rate if TokenRate.objects.exists() else 3800
+    total_ugx = total_tokens * current_rate
+    
+    context = {
+        'total_tokens': total_tokens,
+        'total_ugx': total_ugx,
+        'user_count': CustomUser.objects.count(),
+        'agent_count': CustomUser.objects.filter(is_agent=True).count(),
+    }
+    
+    return render(request, 'users/admin_balances.html', context)
+
+# users/views.py
+@login_required
+def send_tokens(request):
+    if not request.user.is_superuser:
+        return redirect('dashboard')
+    
+    if request.method == 'POST':
+        form = SendTokensForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            amount = form.cleaned_data['amount']
+            
+            try:
+                user = CustomUser.objects.get(username=username)
+                profile = user.userprofile
+                profile.token_balance += amount
+                profile.save()
+                
+                # Create transaction record
+                transaction = Transaction.objects.create(
+                    user=user,
+                    agent=request.user,
+                    amount=amount,
+                    transaction_type='deposit'
+                )
+                
+                # Create notifications
+                Notification.objects.create(
+                    user=user,
+                    message=f"You received {amount} tokens from {request.user.username}.",
+                    transaction=transaction
+                )
+                Notification.objects.create(
+                    user=request.user,
+                    message=f"You sent {amount} tokens to {user.username}.",
+                    transaction=transaction
+                )
+                
+                messages.success(request, f"Sent {amount} tokens to {username}")
+                return redirect('transactions:transaction_receipt', pk=transaction.id)  # Redirect to receipt
+            except CustomUser.DoesNotExist:
+                messages.error(request, "User not found")
+    else:
+        form = SendTokensForm()
+    
+    return render(request, 'users/send_tokens.html', {'form': form})
+
+@login_required
+def transaction_receipt(request, tx_id):
+    transaction = get_object_or_404(Transaction, id=tx_id, user=request.user)
+    return render(request, 'users/receipt.html', {'transaction': transaction})
+
+def user_logout(request):
+    logout(request)
+    return redirect('home')
+    
+# users/views.py
+@login_required
+def notifications(request):
+    all_notifications = request.user.notifications.order_by('-created_at')
+    return render(request, 'users/notifications.html', {
+        'notifications': all_notifications
+    })
+
+@login_required
+def delete_notification(request, notification_id):
+    notification = get_object_or_404(
+        Notification, 
+        id=notification_id,
+        user=request.user
+    )
+    notification.delete()
+    messages.success(request, "Notification deleted successfully")
+    return redirect('users:notifications')
+
+@login_required
+def mark_notification_as_read(request, notification_id):
+    notification = get_object_or_404(
+        Notification, 
+        id=notification_id,
+        user=request.user
+    )
+    notification.is_read = True
+    notification.save()
+    messages.success(request, "Notification marked as read")
+    return redirect('users:notifications')
+    
+    
+@login_required
+def user_profile(request, username):
+    if not request.user.is_authenticated:
+        return redirect(f'{settings.LOGIN_URL}?next={request.path}')
+    
+    user = get_object_or_404(CustomUser, username=username)
+    is_owner = (request.user == user)
+    is_following = request.user.userprofile.followers.filter(id=user.id).exists()
+    
+    context = {
+        'profile_user': user,
+        'posts': Post.objects.filter(user=user),
+        'is_owner': is_owner,
+        'is_following': is_following,
+    }
+    return render(request, 'users/profile.html', context)
+    
+# users/views.py
+@login_required
+def follow_user(request, username):
+    user_to_follow = get_object_or_404(CustomUser, username=username)
+    request.user.userprofile.following.add(user_to_follow.userprofile)
+    return JsonResponse({'status': 'following', 'count': user_to_follow.userprofile.followers.count()})
+
+@login_required
+def unfollow_user(request, username):
+    user_to_unfollow = get_object_or_404(CustomUser, username=username)
+    request.user.userprofile.following.remove(user_to_unfollow.userprofile)
+    return JsonResponse({'status': 'unfollowed', 'count': user_to_unfollow.userprofile.followers.count()})
+    
+    
+
+
+def user_profile(request, username):
+    user = get_object_or_404(CustomUser, username=username)
+    is_owner = (request.user == user)
+    is_following = request.user.userprofile.followers.filter(id=user.id).exists()
+    
+    context = {
+        'profile_user': user,
+        'tweets': Tweet.objects.filter(user=user),  # Changed from Post to Tweet
+        'is_owner': is_owner,
+        'is_following': is_following,
+    }
+    return render(request, 'users/profile.html', context)
+
+users url file
+from django.urls import path
+from . import views
+
+app_name = 'users'
+
+urlpatterns = [
+  path('admin-balances/', views.admin_balances, name='admin_balances'),
+    path('register/', views.register, name='register'),
+    path('login/', views.user_login, name='login'),
+    path('logout/', views.user_logout, name='logout'),  # Add this line
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('profile/edit/', views.edit_profile, name='edit_profile'),
+   path('create-agent/', views.create_agent, name='create_agent'),
+    path('send-tokens/', views.send_tokens, name='send_tokens'),
+    path('transaction/<int:tx_id>/receipt/', views.transaction_receipt, name='transaction_receipt'),
+    path('notifications/', views.notifications, name='notifications'),
+    path('notifications/<int:notification_id>/read/', 
+         views.mark_notification_as_read, name='mark_notification_as_read'),
+    path('notifications/<int:notification_id>/delete/', 
+         views.delete_notification, name='delete_notification'),
+    path('profile/<str:username>/', views.user_profile, name='user_profile'),
+  
+]
+
+
+
+
+
+
+    
+    
+
+base.html
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NUSU App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/print.css' %}" media="print">
+</head>
+<body class="bg-light d-flex flex-column min-vh-100">
+    <!-- Navigation -->
+    <header class="border-bottom">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
+            <div class="container">
+                <a class="navbar-brand fw-bold" href="{% url 'home' %}">
+                    <i class="bi bi-piggy-bank me-2"></i>NUSU App
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <div class="navbar-nav ms-auto">
+                        <a class="nav-link" href="{% url 'community:feed' %}">
+                            <i class="bi bi-newspaper"></i> Feed
+                        </a>
+                        {% if user.is_authenticated %}
+                            <!-- Notification Dropdown -->
+                            <div class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" 
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-bell"></i>
+                                    {% if unread_notifications_count > 0 %}
+                                    <span class="badge bg-danger">{{ unread_notifications_count }}</span>
+                                    {% endif %}
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    {% for notification in unread_notifications %}
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'users:notifications' %}">
+                                            <div>
+                                                <p class="mb-0">{{ notification.message }}</p>
+                                                <small class="text-muted">{{ notification.created_at|timesince }} ago</small>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    {% empty %}
+                                    <li><a class="dropdown-item" href="#">No new notifications</a></li>
+                                    {% endfor %}
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item text-center" href="{% url 'users:notifications' %}">
+                                        View All Notifications
+                                    </a></li>
+                                </ul>
+                            </div>
+                            <!-- User Dropdown -->
+                            <div class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" 
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-person-circle"></i> {{ user.username }}
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="{% url 'users:dashboard' %}">
+                                        <i class="bi bi-speedometer2"></i> Dashboard
+                                    </a></li>
+                                    <li><a class="dropdown-item" href="{% url 'community:create_tweet' %}">
+                                        <i class="bi bi-pencil-square"></i> Compose Tweet
+                                    </a></li>
+                                    <li><a class="dropdown-item" href="{% url 'users:edit_profile' %}">
+                                        <i class="bi bi-gear"></i> Edit Profile
+                                    </a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item text-danger" href="{% url 'users:logout' %}">
+                                        <i class="bi bi-box-arrow-left"></i> Logout
+                                    </a></li>
+                                </ul>
+                            </div>
+                        {% else %}
+                            <a class="nav-link" href="{% url 'users:login' %}">
+                                <i class="bi bi-box-arrow-in-right"></i> Login
+                            </a>
+                            <a class="nav-link" href="{% url 'users:register' %}">
+                                <i class="bi bi-person-plus"></i> Register
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mt-5 flex-grow-1">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-top py-3 mt-auto">
+        <div class="container text-center text-muted">
+            <p class="mb-0">🚀 Built by kifule | © 2025 NUSU</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>
+user_profile html file
+<!-- users/templates/users/user_profile.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Profile Header -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <img src="{{ profile_user.userprofile.profile_picture.url }}" 
+                     class="rounded-circle me-3" width="100" height="100">
+                <div>
+                    <h2>{{ profile_user.username }}</h2>
+                    <div class="d-flex gap-3">
+                        <span>{{ profile_user.userprofile.followers.count }} followers</span>
+                        <span>{{ profile_user.userprofile.following.count }} following</span>
+                        <span>{{ tweets.count }} tweets</span>
+                    </div>
+                    {% if not is_owner %}
+                        <button class="btn btn-dark follow-btn mt-2" 
+                                data-username="{{ profile_user.username }}">
+                            {% if is_following %}Unfollow{% else %}Follow{% endif %}
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User's Tweets -->
+    <div class="row">
+        {% for tweet in tweets %}
+            <div class="col-md-6 mb-3">
+                {% include 'community/tweet_card.html' with tweet=tweet %}
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+edit_profile html file
+<!-- users/templates/users/edit_profile.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <!-- Profile Edit Form -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">Edit Profile</h2>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">Profile Picture</label>
+                            <input type="file" name="profile_picture" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Bio</label>
+                            <textarea name="bio" class="form-control">{{ form.instance.bio }}</textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Website</label>
+                            <input type="url" name="website" class="form-control" value="{{ form.instance.website }}">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Location</label>
+                            <input type="text" name="location" class="form-control" value="{{ form.instance.location }}">
+                        </div>
+                        <button type="submit" class="btn btn-dark">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- User's Tweets -->
+            <h4>Your Tweets</h4>
+            {% for tweet in tweets %}
+                {% include 'community/tweet_card.html' with tweet=tweet %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+profile html file
+<!-- users/templates/users/profile.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Profile Header -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <img src="{{ profile_user.userprofile.profile_picture.url }}" 
+                     class="rounded-circle me-3" width="100" height="100">
+                <div>
+                    <h2>{{ profile_user.username }}</h2>
+                    <div class="d-flex gap-3">
+                        <span>{{ profile_user.userprofile.followers.count }} followers</span>
+                        <span>{{ profile_user.userprofile.following.count }} following</span>
+                        <span>{{ tweets.count }} tweets</span>
+                    </div>
+                    {% if not is_owner %}
+                        <button class="btn btn-dark follow-btn mt-2" 
+                                data-username="{{ profile_user.username }}">
+                            {% if is_following %}Unfollow{% else %}Follow{% endif %}
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User's Tweets -->
+    <div class="row">
+        {% for tweet in tweets %}
+            <div class="col-md-6 mb-3">
+                {% include 'community/tweet_card.html' with tweet=tweet %}
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+tweet html file
+<!-- community/templates/community/tweet_detail.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Parent Tweet -->
+    {% if tweet.parent %}
+        <div class="mb-3">
+            <a href="{% url 'community:tweet_detail' tweet.parent.id %}" 
+               class="btn btn-outline-dark btn-sm">
+                <i class="bi bi-arrow-up"></i> View parent tweet
+            </a>
+        </div>
+    {% endif %}
+
+    <!-- Main Tweet -->
+    {% include 'community/tweet_card.html' with tweet=tweet %}
+
+    <!-- Replies -->
+    <div class="ms-4">
+        {% for reply in replies %}
+            {% include 'community/tweet_card.html' with tweet=reply %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+tweet_card html file
+<!-- community/templates/community/tweet_card.html -->
+<div class="card mb-3">
+    <div class="card-body">
+        <!-- User Header -->
+        <div class="d-flex align-items-center mb-2">
+            <!-- Profile Picture -->
+            {% if tweet.user.userprofile.profile_picture %}
+                <img src="{{ tweet.user.userprofile.profile_picture.url }}" 
+                     class="rounded-circle me-2" width="40" height="40">
+            {% else %}
+                <div class="rounded-circle bg-secondary me-2" 
+                     style="width: 40px; height: 40px;"></div>
+            {% endif %}
+            <div>
+                <!-- Username -->
+                <strong>
+                    <a href="{% url 'users:user_profile' tweet.user.username %}" 
+                       class="text-decoration-none text-dark">
+                        {{ tweet.user.username }}
+                    </a>
+                </strong>
+                <!-- Time -->
+                <small class="text-muted">{{ tweet.created_at|timesince }} ago</small>
+            </div>
+        </div>
+
+        <!-- Tweet Content -->
+        <p class="mb-2">{{ tweet.content }}</p>
+
+        <!-- Media -->
+        {% if tweet.image %}
+            <img src="{{ tweet.image.url }}" class="img-fluid rounded mb-2">
+        {% endif %}
+
+        <!-- Actions -->
+        <div class="d-flex gap-3">
+            <button class="btn btn-sm btn-outline-dark like-btn" 
+                    data-tweet-id="{{ tweet.id }}">
+                <i class="bi bi-heart{% if request.user in tweet.likes.all %}-fill text-danger{% endif %}"></i>
+                <span class="like-count">{{ tweet.likes.count }}</span>
+            </button>
+            
+            <button class="btn btn-sm btn-outline-dark view-replies-btn"
+                    data-tweet-id="{{ tweet.id }}"
+                    data-expanded="false">
+                <i class="bi bi-chat"></i> 
+                <span class="reply-count">{{ tweet.get_replies.count }}</span>
+            </button>
+            
+            <a href="{% url 'community:reply_tweet' tweet.id %}" 
+               class="btn btn-sm btn-outline-dark">
+                <i class="bi bi-arrow-90deg-right"></i> Reply
+            </a>
+        </div>
+
+        <!-- Collapsible Replies Container -->
+        <div class="replies-container ms-4" id="replies-{{ tweet.id }}" style="display: none;">
+            {% for reply in tweet.get_replies|slice:":3" %}
+                {% include 'community/tweet_card.html' with tweet=reply %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+feed html file
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <!-- Compose Tweet Card -->
+            <div class="card mb-3">
+                <div class="card-body">
+                    <a href="{% url 'community:create_tweet' %}" class="btn btn-dark w-100">
+                        <i class="bi bi-pencil"></i> Compose Tweet
+                    </a>
+                </div>
+            </div>
+
+            <!-- Tweets Feed -->
+            {% for tweet in tweets %}
+                {% include 'community/tweet_card.html' with tweet=tweet %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+compose html file
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">
+                        {% if tweet %}Reply to Tweet{% else %}Compose Tweet{% endif %}
+                    </h4>
+                    
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <textarea name="content" class="form-control" rows="4" 
+                                      placeholder="What's happening?" required></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <input type="file" name="image" class="form-control" 
+                                   accept="image/*" id="tweet-image">
+                            <label for="tweet-image" class="form-label mt-2">
+                                Add image (optional)
+                            </label>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-dark">
+                                <i class="bi bi-send"></i> Post Tweet
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+dashboard html file
+<!-- templates/users/dashboard.html -->
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title mb-4"><i class="bi bi-speedometer2"></i> Dashboard</h2>
+                    
+                    <!-- Admin Actions -->
+                    {% if user.is_superuser %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5><i class="bi bi-shield-lock"></i> Admin Actions</h5>
+                            <div class="d-grid gap-2">
+                                <a href="{% url 'users:create_agent' %}" class="btn btn-dark">
+                                    <i class="bi bi-person-plus"></i> Create Agent
+                                </a>
+                                <a href="{% url 'users:send_tokens' %}" class="btn btn-dark">
+                                    <i class="bi bi-send"></i> Send Tokens
+                                </a>
+                                <a href="{% url 'users:admin_balances' %}" class="btn btn-dark">
+                                    <i class="bi bi-cash-stack"></i> System Balances
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Balances -->
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5><i class="bi bi-wallet2"></i> Your Balances</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="lead">Token Balance: {{ token_balance }} NSU</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="lead">UGX Balance: {{ profile.get_ugx_balance|floatformat:2 }} UGX</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Transfer Tokens (for normal users) -->
+                    {% if not user.is_superuser and not user.is_agent %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5><i class="bi bi-arrow-left-right"></i> Transfer Tokens</h5>
+                            <div class="d-grid">
+                                <a href="{% url 'transactions:transfer_tokens' %}" class="btn btn-dark">
+                                    <i class="bi bi-send"></i> Transfer Tokens
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Withdraw Funds (for normal users) -->
+                    {% if not user.is_agent and not user.is_superuser %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5><i class="bi bi-cash"></i> Withdraw Funds</h5>
+                            <div class="d-grid">
+                                <a href="{% url 'transactions:request_withdrawal' %}" class="btn btn-dark">
+                                    <i class="bi bi-wallet2"></i> Request Withdrawal
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Process Withdrawals (for agents) -->
+                    {% if user.is_agent or user.is_superuser %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5><i class="bi bi-cash-coin"></i> Process Withdrawals</h5>
+                            <div class="d-grid">
+                                <a href="{% url 'transactions:process_withdrawal' %}" class="btn btn-dark">
+                                    <i class="bi bi-wallet2"></i> Process Withdrawal
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Recent Transactions -->
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5><i class="bi bi-clock-history"></i> Recent Transactions</h5>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Type</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for tx in transactions %}
+                                    <tr>
+                                        <td>{{ tx.transaction_type }}</td>
+                                        <td>{{ tx.amount }}</td>
+                                        <td>{{ tx.status }}</td>
+                                        <td>{{ tx.timestamp|date:"M d, Y" }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Pending Withdrawals (for agents) -->
+                    {% if user.is_agent and pending_withdrawals %}
+                    <div class="card">
+                        <div class="card-body">
+                            <h5><i class="bi bi-exclamation-triangle"></i> Pending Withdrawals</h5>
+                            <div class="list-group">
+                                {% for withdrawal in pending_withdrawals %}
+                                <div class="list-group-item">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <strong>{{ withdrawal.user.username }}</strong>
+                                            <br>
+                                            <small>Amount: {{ withdrawal.amount }}</small>
+                                        </div>
+                                        <span class="badge bg-danger">Pending</span>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+main.js
+// static/js/main.js
+document.addEventListener('DOMContentLoaded', function() {
+    // Like Button Handler
+    document.body.addEventListener('click', async (e) => {
+        const likeBtn = e.target.closest('.like-btn');
+        if (likeBtn) {
+            e.preventDefault();
+            const tweetId = likeBtn.dataset.tweetId;
+            try {
+                const response = await fetch(`/community/tweet/${tweetId}/like/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data = await response.json();
+                if (data.success) {
+                    const icon = likeBtn.querySelector('i');
+                    const count = likeBtn.querySelector('.like-count');
+                    icon.className = data.liked ? 'bi bi-heart-fill text-danger' : 'bi bi-heart';
+                    count.textContent = data.like_count;
+                }
+            } catch (error) {
+                console.error('Like error:', error);
+            }
+        }
+    });
+
+    // CSRF Token Helper
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+});
+style.css
+/* Custom Styles */
+body {
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+}
+
+.navbar-brand i {
+    font-size: 1.8rem;
+    vertical-align: middle;
+}
+
+.profile-picture {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border: 3px solid #2A3F54;
+}
+
+.card {
+    border-radius: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+}
+
+.btn-dark {
+    background-color: #2A3F54;
+    padding: 12px;
+    font-size: 1.1rem;
+}
+
+.btn-dark:hover {
+    background-color: #1a2b3c;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .navbar-nav {
+        margin-top: 1rem;
+    }
+    
+    .profile-picture {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .card {
+        margin-bottom: 1rem;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .navbar, .footer, .btn {
+        display: none;
+    }
+    
+    .card {
+        border: none;
+        box-shadow: none;
+        margin: 0;
+        padding: 0;
+    }
+}
+
+/* static/css/style.css */
+.comment-container {
+    position: relative;
+    margin-left: 2rem;
+}
+
+.comment-container::before {
+    content: "";
+    position: absolute;
+    left: -15px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: #dee2e6;
+}
+
+.replies-container {
+    margin-left: 1.5rem;
+    border-left: 2px solid #eee;
+    padding-left: 1rem;
+}
+/* Nested comments */
+.comment-container {
+    transition: all 0.3s ease;
+    border-left: 2px solid #eee;
+    padding-left: 1rem;
+    margin-top: 1rem;
+}
+
+.comment-container:hover {
+    border-left-color: #2A3F54;
+}
+
+/* Reply forms */
+.reply-form-container {
+    margin-left: 30px;
+    margin-top: 1rem;
+}
+
+/* Profile links */
+.profile-link:hover {
+    filter: brightness(0.9);
+}
+/* static/css/style.css */
+.comment-container:target {
+    background: #fff9e6;
+    box-shadow: 0 0 0 2px #ffd700;
+    border-radius: 4px;
+}
+
+.comment-container {
+    transition: all 0.2s ease;
+    padding-left: 1rem;
+    border-left: 2px solid #eee;
+}
+core settings file
+# core/settings.py
+import os
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+SECRET_KEY = 'django-insecure-your-secret-key-here'  # Replace in production
+
+DEBUG = True
+
+ALLOWED_HOSTS = ['*']
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    
+    # Custom Apps
+    'users',
+    'tokens',
+    'transactions',
+    'streaks',
+    'community',
+    'widget_tweaks',
+]
+
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'users.middleware.AjaxAuthenticationMiddleware',
+]
+
+ROOT_URLCONF = 'core.urls'
+
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [BASE_DIR / 'templates'],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+                'core.context_processors.notifications',  # Add this line
+            ],
+        },
+    },
+]
+
+WSGI_APPLICATION = 'core.wsgi.application'
+
+# SQLite Database
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
+
+LANGUAGE_CODE = 'en-us'
+TIME_ZONE = 'Africa/Nairobi' 
+USE_I18N = True
+USE_TZ = True
+
+
+
+# Static files (CSS, JavaScript, Images)
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # For collecting static files
+STATICFILES_DIRS = [BASE_DIR / 'static']  # Additional directories (if needed)
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# Custom User Model
+AUTH_USER_MODEL = 'users.CustomUser'
+
+# File Upload Limits (5MB)
+FILE_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5MB
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# core/settings.py
+import logging
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
+}
+# core/settings.py
+LOGIN_URL = '/users/login/'
+everything is working well but just need some adjustments 

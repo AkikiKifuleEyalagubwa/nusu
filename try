@@ -1,0 +1,657 @@
+/* Base Styles */
+body.bg-light {
+    background-color: #f8f9fa !important;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* Media grid alignment */
+.media-grid {
+    margin-left: 0; /* Remove left margin */
+}
+
+
+/* Updated Tweet Card Layout */
+.tweet-card {
+    position: relative;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    padding: 12px;
+}
+
+/* Retweet Header */
+.retweet-header {
+    font-size: 12px;
+    margin-left: 20px;
+    color: #647788;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    
+}
+/* Main Content Area */
+.tweet-main {
+    padding-top: 12px;
+    min-height: 60px;
+}
+
+/* Profile and Username Row */
+.user-meta {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    margin-bottom: 8px;
+    margin-left: 20px;
+}
+.user-meta a{
+  text-decoration: none;
+}
+/* Adjust profile picture positioning */
+.profile-section {
+    position: absolute;
+    left: 0; /* Align with the edge */
+    top: 16px;
+    width: 48px;
+    height: 48px;
+}
+.profile-pic {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.profile-pic img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.username {
+    font-weight: 700;
+    font-size: 17px;
+    color: #0f1419;
+    margin-right: 0px;
+}
+
+/* Tweet Body */
+.tweet-body {
+    width: 100%;
+    margin-left: 0;
+}
+.tweet-body a {
+   text-decoration: none;
+   
+}
+
+.tweet-body p {
+    margin: 0;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 1.5;
+    color: rgba(0, 0, 0, 1);
+}
+
+/* Media Grid Fix */
+.media-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 8px;
+    margin-top: 12px;
+    width: 100%;
+}
+
+.media-item {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+/* Compose Page Media Preview */
+.media-preview {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.preview-item {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+}
+
+.action-btn {
+    color: #647788;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.action-btn:hover {
+    color: #1da1f2;
+}
+
+.like-btn:hover { color: #e0245e; }
+.retweet-btn:hover { color: #17bf63; }
+.quote-btn:hover { color: #1da1f2; }
+
+.bi-heart-fill { color: rgba(0, 0, 0, 0.9); }
+.bi-repeat-fill { color: rgba(0, 0, 0, 0.9); }
+
+.count {
+    font-size: 0.875rem;
+    color: #647788;
+}
+/* Keep all text black by default */
+.tweet-content {
+    color: #000;
+}
+
+/* Style only the special character links */
+.mention-link, .hashtag-link, .stock-link {
+    color: #1a8cd8 !important; /* Twitter blue */
+}
+
+/* Keep normal text parts black */
+.tweet-content a span {
+    color: #000;
+}
+
+.tweet-time {
+    color: #647788;
+    font-size: 13px;
+    margin-left: auto; /* Push timestamp to the right */
+}
+/* Badges */
+/* Add to style.css */
+/* Verification Badge */
+/* Add to style.css */
+/* Verification Badge */
+.verified-badge {
+    color: #1da1f2; /* Twitter blue */
+    font-size: 0.9em;
+    margin-left: 4px;
+}
+
+/* User Badges */
+.badge-icon {
+    font-size: 0.9em;
+    margin-left: 4px;
+    color: white; /* White icon */
+}
+
+.badge-icon.bronze { color: #cd7f32; } /* Bronze color */
+.badge-icon.silver { color: #c0c0c0; } /* Silver color */
+.badge-icon.gold { color: #ffd700; } /* Gold color */
+.badge-icon.platinum { color: #7995a5; } /* Platinum color */
+
+
+
+/* Tweet Body */
+.tweet-body {
+    margin-bottom: 12px;
+}
+
+.tweet-text {
+    font-size: 15px;
+    line-height: 1.5;
+    margin: 0 0 12px;
+}
+
+
+/* Media Grid - Add max-width constraint */
+
+.floating-compose-btn .btn {
+    position: fixed;
+    bottom: 15px;
+    right: 0px;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    background-color: black;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+    z-index: 1000;
+}
+
+.floating-compose-btn .btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Ensure the container has relative positioning */
+.container {
+    position: relative;
+}
+
+/* Modal Styles */
+#composeOptionsModal .modal-content {
+    border-radius: 16px;
+}
+
+#composeOptionsModal .btn {
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 16px;
+    text-align: left;
+}
+
+
+.media-item img,
+.media-item video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+/* Add to style.css */
+/* Compose Page Styles */
+.compose-card {
+    border-radius: 1rem;
+    border: none;
+}
+
+.tweet-form textarea.tweet-content {
+    border: none;
+    padding: 1.5rem;
+    font-size: 1.1rem;
+    resize: none;
+    box-shadow: none !important;
+}
+
+.tweet-form textarea.tweet-content:focus {
+    box-shadow: none;
+    border-color: #e0e0e0;
+}
+
+.media-upload {
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.media-label {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.media-label:hover {
+    background-color: #e0e0e0 !important;
+}
+.media-preview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 0.5rem;
+}
+
+.preview-item {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 0.5rem;
+}
+
+/* Thread system */
+/* Thread Detail Page */
+.thread-header {
+    border-left: 4px solid #1da1f2;
+    border-radius: 8px;
+}
+
+.thread-position-badge {
+    position: absolute;
+    left: -30px;
+    top: 20px;
+    z-index: 2;
+}
+
+.thread-tweet-card {
+    position: relative;
+    z-index: 1;
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+}
+
+.thread-connector {
+    position: absolute;
+    left: -18px;
+    top: 50px;
+    bottom: -25px;
+    width: 2px;
+    background: #1da1f2;
+    z-index: 0;
+}
+
+.thread-reply-content {
+    border-radius: 15px;
+    padding: 1rem;
+    border: 1px solid #e0e0e0;
+    transition: all 0.2s;
+}
+
+.thread-reply-content:focus {
+    border-color: #1da1f2;
+    box-shadow: 0 0 0 3px rgba(29,161,242,0.1);
+}
+/* Add to style.css */
+/* Retweet color */
+.bi-repeat {
+    color: #647788;
+    transition: color 0.2s;
+}
+
+.retweeted {
+    color: #17bf63 !important;
+}
+
+/* Thread alert */
+.alert-info {
+    border-radius: 12px;
+    border: 1px solid #1da1f2;
+    background-color: #e8f4fb;
+}
+
+
+.reply-form textarea {
+    border-radius: 1.5rem;
+    padding: 1rem 1.5rem;
+    border: 1px solid #e0e0e0;
+    transition: all 0.2s;
+}
+
+.reply-form textarea:focus {
+    border-color: #1da1f2;
+    box-shadow: 0 0 0 3px rgba(29,161,242,0.1);
+}
+
+/* Modern Buttons */
+.btn-dark {
+    background-color: black;
+    border: none;
+    padding: 0.5rem 1.5rem;
+}
+
+.
+
+.btn-outline-secondary {
+    border-color: #e0e0e0;
+}
+/* Quoted Tweet */
+.quoted-tweet {
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 12px;
+    margin-top: 12px;
+    margin-bottom: 1px;
+    background-color: #f8f9fa;
+    
+}
+
+.quoted-tweet .media-item {
+    max-height: 100%;
+}
+
+.quoted-tweet .user-meta {
+    margin-bottom: 2px;
+    
+}
+
+.quoted-tweet .username {
+    font-weight: 700;
+    font-size: 14px;
+    color: #0f1419;
+    
+}
+
+
+.quoted-tweet p{
+    font-size: 10px;
+}
+
+/* Action Buttons */
+
+/* Media Upload */
+.media-upload {
+    position: relative;
+    display: inline-block;
+}
+
+.camera-icon {
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+
+.camera-icon:hover {
+    background-color: rgba(29, 161, 242, 0.1);
+}
+
+/* Comment Form */
+.comment-form {
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.input-group textarea {
+    border-radius: 20px;
+    padding: 12px;
+    resize: none;
+}
+/* Search Autocomplete in Modal */
+.autocomplete-dropdown {
+    max-height: 50vh;
+    overflow-y: auto;
+    top: 100%;
+    left: 0;
+}
+
+.modal .autocomplete-dropdown {
+    position: fixed;
+    width: calc(100% - 2rem);
+    margin: 0 1rem;
+}
+
+.autocomplete-item {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f0f0f0;
+    transition: all 0.2s;
+}
+
+.autocomplete-item:hover {
+    background-color: #f8f9fa;
+    cursor: pointer;
+}
+
+/* Ensure modal backdrop doesn't interfere */
+.modal-backdrop {
+    z-index: 1040;
+}
+
+.modal {
+    z-index: 1050;
+}
+/* Trending Cards */
+
+
+
+/* Add these styles to your CSS file */
+
+/* 1. Text color adjustments */
+.tweet-content {
+    color: #000; /* Ensure base text is black */
+}
+
+/* 2. Time and action button positioning */
+.user-meta .tweet-time {
+    display: none; /* Hide original time in user meta */
+}
+
+.tweet-actions {
+    position: relative;
+    padding-right: 90px; /* Space for time */
+    margin-top: 1rem;
+    min-height: 32px;
+}
+
+.tweet-actions::after {
+    content: attr(data-time);
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #647788;
+    font-size: 0.875rem;
+}
+
+/* 3. Trending sidebar layout */
+
+
+.tweet-card {
+    background-color: #1a1a1a;
+    border-color: #333;
+}
+
+/* Text Color Fix */
+.tweet-content {
+    color: #fff !important;
+}
+
+.tweet-content a {
+    color: inherit;
+}
+
+/* Special Character Links */
+.mention-link, .hashtag-link, .stock-link {
+    color: #1a8cd8 !important;
+}
+
+/* Trending Sidebar */
+.trending-sidebar {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 16px;
+    background-color: #1a1a1a;
+    border-radius: 12px;
+    border: 1px solid #333;
+}
+
+.trending-card {
+    flex: 1;
+    min-width: 200px;
+    background-color: #262626;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 12px;
+    transition: all 0.2s;
+}
+
+.trending-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.show-more-btn {
+    background-color: #000;
+    color: #fff !important;
+    border: 1px solid #333;
+    border-radius: 20px;
+    padding: 8px 16px;
+    text-align: center;
+    transition: all 0.2s;
+    text-decoration: none !important;
+}
+
+.show-more-btn:hover {
+    background-color: #1a1a1a;
+    color: #fff;
+}
+
+/* Time Positioning */
+.tweet-actions {
+    position: relative;
+    padding-right: 90px;
+    margin-top: 1rem;
+}
+
+.tweet-actions::after {
+    content: attr(data-time);
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #647788;
+    font-size: 0.875rem;
+}
+
+/* Existing styles below remain unchanged */
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+    
+    .profile-pic {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .tweet-main {
+        margin-left: 0px;
+        padding: 12px;
+    }
+    
+    .action-buttons {
+        gap: 16px;
+    }
+    
+    
+    
+}
+
+
+// Initialize theme
+function initTheme() {
+  const savedTheme = localStorage.getItem('theme') || 'light';
+  document.body.setAttribute('data-theme', savedTheme);
+  
+  // Add toggle button to DOM
+  const toggleBtn = document.createElement('div');
+  toggleBtn.className = 'theme-toggle';
+  toggleBtn.innerHTML = `
+    <i id="theme-icon" class="bi ${savedTheme === 'dark' ? 'bi-moon' : 'bi-sun'}"></i>
+  `;
+  toggleBtn.onclick = toggleTheme;
+  document.body.appendChild(toggleBtn);
+}
+
+// Call on page load
+document.addEventListener('DOMContentLoaded', initTheme);

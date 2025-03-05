@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">Quote Retweet</h4>
+                    
+                    <!-- Original Tweet -->
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                                <img src="{{ original_tweet.user.userprofile.profile_picture.url }}" 
+                                     class="rounded-circle me-2" width="40" height="40">
+                                <div>
+                                    <strong>
+                                        <a href="{% url 'users:user_profile' original_tweet.user.username %}" 
+                                           class="text-decoration-none text-dark">
+                                            {{ original_tweet.user.username }}
+                                        </a>
+                                    </strong>
+                                    <small class="text-muted">{{ original_tweet.created_at|timesince }} ago</small>
+                                </div>
+                            </div>
+                            <p class="mb-2">{{ original_tweet.content }}</p>
+                            {% if original_tweet.image %}
+                                <img src="{{ original_tweet.image.url }}" class="img-fluid rounded">
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- Quote Form -->
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <textarea name="content" 
+                                      class="form-control" 
+                                      rows="4" 
+                                      placeholder="Add your comment..." 
+                                      required></textarea>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-dark">
+                                <i class="bi bi-send"></i> Post Quote Retweet
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

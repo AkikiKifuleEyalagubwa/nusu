@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Search Header -->
+            <div class="text-center mb-5">
+                <h2 class="mb-3"><i class="bi bi-search"></i> Search Nusu</h2>
+                
+                <!-- Search Form -->
+                <form action="{% url 'community:search' %}" method="GET" class="mb-4">
+                    <div class="input-group input-group-lg">
+                        <input type="text" 
+                               class="form-control" 
+                               name="q" 
+                               placeholder="Search users, hashtags, or posts..."
+                               value="{{ query }}">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="bi bi-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Search Results -->
+            {% if query %}
+                <div class="search-results">
+                    {% if users %}
+                        <div class="card mb-4">
+                            <div class="card-header">Users</div>
+                            <div class="card-body">
+                                {% for user in users %}
+                                <a href="{% url 'users:user_profile' user.username %}" 
+                                   class="d-block p-3 text-decoration-none border-bottom">
+                                    <div class="d-flex align-items-center">
+                                        <img src="{{ user.userprofile.profile_picture.url }}" 
+                                             class="rounded-circle me-3" 
+                                             width="50" 
+                                             height="50">
+                                        <div>
+                                            <h5 class="mb-0">@{{ user.username }}</h5>
+                                            <small class="text-muted">{{ user.get_full_name }}</small>
+                                        </div>
+                                    </div>
+                                </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if tweets %}
+                        <div class="card">
+                            <div class="card-header">Posts</div>
+                            <div class="card-body">
+                                {% for tweet in tweets %}
+                                    {% include 'community/tweet_card.html' with tweet=tweet %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

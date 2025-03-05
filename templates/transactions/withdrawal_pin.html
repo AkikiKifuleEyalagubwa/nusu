@@ -1,0 +1,12 @@
+<!-- transactions/templates/transactions/withdrawal_pin.html -->
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Withdrawal PIN</h2>
+    <div class="alert alert-info">
+        <p>Your withdrawal PIN is: <strong>{{ pin }}</strong></p>
+        <p>This PIN expires at: {{ expiry|time:"H:i" }} on {{ expiry|date:"M d, Y" }}</p>
+        <p>Give this PIN to an agent to complete your withdrawal.</p>
+    </div>
+</div>
+{% endblock %}

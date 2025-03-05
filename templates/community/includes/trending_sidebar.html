@@ -1,0 +1,19 @@
+<div class="trending-sidebar">
+  <h5 class="mb-3" style="width: 100%; color: var(--text-color)">Trending Now</h5>
+  {% for hashtag in trending_hashtags|slice:":3" %}
+  <div class="trending-card">
+    <div class="d-flex justify-content-between align-items-center">
+      <div>
+        <span style="color: var(--accent-color)">#{{ hashtag.name }}</span>
+        <small style="color: var(--secondary-text)">{{ hashtag.related_tweets.count }} posts</small>
+      </div>
+      <span class="badge" style="background-color: var(--border-color); color: var(--text-color)">
+        {{ forloop.counter }}
+      </span>
+    </div>
+  </div>
+  {% endfor %}
+  <a href="{% url 'community:trending' %}" class="show-more-btn" style="background-color: var(--accent-color); color: white;">
+    Show more trends
+  </a>
+</div>

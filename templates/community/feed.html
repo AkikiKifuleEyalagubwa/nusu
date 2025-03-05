@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load community_tags %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <!-- Trending Sidebar -->
+        <div class="col-md-4">
+            {% include 'community/includes/trending_sidebar.html' %}
+        </div>
+        <!-- Main Feed -->
+        <div class="col-md-8">
+            <!-- Floating Action Button -->
+            <div class="floating-compose-btn">
+                <button class="btn btn-primary rounded-circle p-3" data-bs-toggle="modal" data-bs-target="#actionModal">
+                    <i class="bi bi-plus-lg fs-4"></i>
+                </button>
+            </div>
+
+            <!-- Action Modal -->
+            <div class="modal fade" id="actionModal" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-body p-4" x-data="{ searchOpen: false }">
+                            <!-- Search Bar with Autocomplete -->
+                            <div class="search-container position-relative mb-4">
+                                <form action="{% url 'community:search' %}" method="GET">
+                                    <div class="input-group">
+                                        <input type="text" 
+                                               class="form-control" 
+                                               name="q" 
+                                               placeholder="Search users, hashtags, or topics..."
+                                               x-ref="searchInput"
+                                               @input.debounce.300ms="
+                                                   $dispatch('search', { query: $event.target.value });
+                                                   searchOpen = true;
+                                               "
+                                               @click="searchOpen = true"
+                                               hx-get="{% url 'community:autocomplete' %}"
+                                               hx-trigger="search from:window"
+                                               hx-vals="js:{ q: event.detail.query }"
+                                               hx-target="#autocomplete-results">
+                                        <button class="btn btn-outline-secondary" type="submit">
+                                            <i class="bi bi-search"></i>
+                                        </button>
+                                    </div>
+                                </form>
+            
+                                <!-- Autocomplete Results -->
+                                <div id="autocomplete-results" 
+                                     class="autocomplete-dropdown card position-absolute w-100 shadow mt-1"
+                                     x-show="searchOpen"
+                                     x-transition:enter="transition ease-out duration-100"
+                                     x-transition:enter-start="opacity-0"
+                                     x-transition:enter-end="opacity-100"
+                                     x-transition:leave="transition ease-in duration-75"
+                                     x-transition:leave-start="opacity-100"
+                                     x-transition:leave-end="opacity-0"
+                                     style="display: none; z-index: 1060;"
+                                     @click.away="searchOpen = false"
+                                     x-cloak>
+                                    <!-- Results will be inserted here by HTMX -->
+                                </div>
+                            </div>
+            
+                            <!-- Other Modal Actions -->
+                            <div class="border-top pt-3">
+                                <a href="{% url 'community:create_tweet' %}" class="btn btn-dark w-100 mb-3">
+                                    <i class="bi bi-pencil me-2"></i> New Post
+                                </a>
+                                <a href="{% url 'community:create_tweet' %}?thread=true" class="btn btn-dark w-100">
+                                    <i class="bi bi-layers me-2"></i> Start Thread
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tweets Feed -->
+            {% for tweet in tweets %}
+                {% include 'community/tweet_card.html' with tweet=tweet %}
+            {% endfor %}
+        </div>
+
+        
+    </div>
+</div>
+{% endblock %}

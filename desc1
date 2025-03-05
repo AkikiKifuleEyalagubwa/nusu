@@ -1,0 +1,191 @@
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Bootstrap components
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+    
+    const authModal = new bootstrap.Modal(document.getElementById('loginRegisterModal'));
+
+    // Generic AJAX Handler
+    async function handleAction(e, selector, urlBuilder, updateUI) {
+        const target = e.target.closest(selector);
+        if (!target) return;
+        
+        e.preventDefault();
+        
+        // Check authentication
+        if (document.body.dataset.authenticated !== 'True') {
+            authModal.show();
+            return;
+        }
+
+        try {
+            const response = await fetch(urlBuilder(target), {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Request failed');
+            }
+
+            const data = await response.json();
+            updateUI(target, data);
+            showToast(data.message || 'Action completed', data.success ? 'success' : 'warning');
+            return data;
+        } catch (error) {
+            console.error('Error:', error);
+            showToast(error.message || 'An error occurred. Please try again.', 'danger');
+            throw error;
+        }
+    }
+
+    // Like System
+    document.body.addEventListener('click', async (e) => {
+        handleAction(e, '.like-btn', (target) => {
+            const tweetId = target.dataset.tweetId;
+            return `/community/tweet/${tweetId}/like/`;
+        }, (target, data) => {
+            const icon = target.querySelector('i');
+            const count = target.querySelector('.like-count');
+            
+            icon.className = data.liked ? 
+                'bi bi-heart-fill text-danger' : 
+                'bi bi-heart';
+                
+            if (count) count.textContent = data.like_count;
+        }).catch(() => {});
+    });
+
+    // Retweet System
+    document.body.addEventListener('click', async (e) => {
+        handleAction(e, '.retweet-btn', (target) => {
+            const tweetId = target.dataset.tweetId;
+            return `/community/tweet/${tweetId}/retweet/`;
+        }, (target, data) => {
+            const icon = target.querySelector('i');
+            const count = target.querySelector('.retweet-count');
+            
+            icon.className = data.retweeted ? 
+                'bi bi-repeat text-success' : 
+                'bi bi-repeat';
+                
+            if (count) count.textContent = data.retweet_count;
+        }).catch(() => {});
+    });
+
+    // Reply System
+    document.body.addEventListener('click', async (e) => {
+        const replyBtn = e.target.closest('.reply-btn');
+        if (replyBtn) {
+            e.preventDefault();
+            
+            if (document.body.dataset.authenticated === 'False') {
+                authModal.show();
+                return;
+            }
+
+            const tweetId = replyBtn.dataset.tweetId;
+            if (tweetId) {
+                window.location.href = `/community/tweet/${tweetId}/reply/`;
+            } else {
+                console.error('Tweet ID is undefined');
+            }
+        }
+    });
+
+    // Delete System
+    document.body.addEventListener('submit', async (e) => {
+        if (e.target.classList.contains('delete-tweet-form')) {
+            e.preventDefault();
+            const form = e.target;
+            
+            if (!confirm('Are you sure you want to delete this tweet?')) return;
+            
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                if (data.status === 'success') {
+                    form.closest('.tweet-card').remove();
+                    showToast('Tweet deleted', 'success');
+                }
+            } catch (error) {
+                showToast('Delete failed', 'danger');
+            }
+        }
+    });
+
+    // Toast System
+    function showToast(message, type = 'info') {
+        const toastContainer = document.getElementById('toastContainer');
+        if (!toastContainer || !message) return;
+
+        const toastEl = document.createElement('div');
+        toastEl.className = `toast align-items-center text-bg-${type} border-0`;
+        toastEl.setAttribute('role', 'alert');
+        toastEl.setAttribute('aria-live', 'assertive');
+        toastEl.setAttribute('aria-atomic', 'true');
+        toastEl.innerHTML = `
+            <div class="d-flex">
+                <div class="toast-body">${message}</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        `;
+
+        toastContainer.appendChild(toastEl);
+        const toast = new bootstrap.Toast(toastEl);
+        toast.show();
+
+        toastEl.addEventListener('hidden.bs.toast', () => toastEl.remove());
+    }
+
+    // CSRF Token Helper
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // Add hover effects to tweet cards
+    document.querySelectorAll('.tweet-card').forEach(card => {
+        card.addEventListener('mouseenter', () => {
+            card.style.transform = 'translateY(-2px)';
+            card.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'none';
+            card.style.boxShadow = 'none';
+        });
+    });
+
+    // Profile picture hover effect
+    document.querySelectorAll('.profile-pic-container').forEach(container => {
+        container.addEventListener('mouseenter', () => {
+            container.style.transform = 'scale(1.05)';
+        });
+        
+        container.addEventListener('mouseleave', () => {
+            container.style.transform = 'none';
+        });
+    });
+});

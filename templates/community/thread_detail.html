@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load community_tags %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Thread Header -->
+    <div class="thread-header card mb-4">
+        <div class="card-body">
+            <h3 class="mb-0">
+                <i class="bi bi-link-45deg text-primary me-2"></i>
+                Thread by @{{ root_tweet.user.username }}
+                <span class="badge bg-secondary ms-2">
+                    {{ thread_tweets|length }} part{{ thread_tweets|length|pluralize }}
+                </span>
+            </h3>
+        </div>
+    </div>
+
+    <!-- Thread Content -->
+    <div class="thread-container">
+        {% for tweet in thread_tweets %}
+            <div class="thread-tweet position-relative mb-4">
+                <!-- Thread Connector -->
+                {% if not forloop.first %}
+                <div class="thread-connector"></div>
+                {% endif %}
+                
+                <!-- Thread Position Badge -->
+                <div class="thread-position-badge">
+                    <span class="badge bg-primary">
+                        Part {{ forloop.counter }}
+                    </span>
+                </div>
+    
+                <!-- Tweet Card -->
+                <div class="tweet-card thread-tweet-card">
+                    {% include 'community/tweet_card.html' with tweet=tweet %}
+                </div>
+            </div>
+        {% empty %}
+            <div class="alert alert-danger">
+                <i class="bi bi-exclamation-circle me-2"></i>
+                This thread could not be loaded. It may have been deleted.
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Continue Thread Form -->
+    <!-- In thread_detail.html -->
+    {% if user.is_authenticated and user == root_tweet.user %}
+    <div class="thread-reply-card card mt-4 shadow">
+        <div class="card-body">
+            <h5 class="card-title text-primary mb-4">
+                <i class="bi bi-plus-circle me-2"></i>
+                Continue this thread
+            </h5>
+            <!-- Form code -->
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <!-- Content Field -->
+                <div class="form-group mb-3">
+                    <textarea name="content" 
+                              class="form-control thread-reply-content" 
+                              rows="3" 
+                              placeholder="Add your thoughts to the thread..."
+                              required></textarea>
+                </div>
+                
+                <!-- Media Upload -->
+                <div class="media-upload mb-4">
+                    <input type="file" name="media" multiple 
+                           id="thread-media-input" class="form-control" 
+                           accept="image/*, video/*">
+                    <small class="text-muted">Add photos/videos (optional)</small>
+                </div>
+                
+                <!-- Form Actions -->
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="bi bi-send me-2"></i>
+                        Post to thread
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}
+
+
+    

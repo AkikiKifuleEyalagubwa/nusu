@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title"><i class="bi bi-receipt"></i> Transaction Details</h2>
+            <table class="table">
+                <tr>
+                    <th>Type</th>
+                    <td>{{ transaction.transaction_type }}</td>
+                </tr>
+                <tr>
+                    <th>Amount</th>
+                    <td>{{ transaction.amount }} NSU</td>
+                </tr>
+                <tr>
+                    <th>Status</th>
+                    <td>{{ transaction.status }}</td>
+                </tr>
+                <tr>
+                    <th>Date</th>
+                    <td>{{ transaction.timestamp|date:"M d, Y H:i" }}</td>
+                </tr>
+                <tr>
+                    <th>Agent</th>
+                    <td>{{ transaction.agent.username|default:"System" }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

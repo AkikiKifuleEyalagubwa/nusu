@@ -1,0 +1,38 @@
+<div class="search-container position-relative">
+    <form action="{% url 'community:search' %}" method="GET" id="searchForm">
+        <div class="input-group">
+            <input type="text" 
+                   class="form-control" 
+                   name="q" 
+                   id="searchInput"
+                   placeholder="Search users (#), hashtags (#), or topics..."
+                   autocomplete="off"
+                   oninput="handleSearchInput()">
+            <button class="btn btn-outline-secondary" type="submit">
+                <i class="bi bi-search"></i>
+            </button>
+        </div>
+    </form>
+
+    <div id="autocomplete-results" 
+         class="autocomplete-dropdown card position-absolute w-100 shadow mt-1"
+         style="display: none;">
+    </div>
+</div>
+<style>
+.autocomplete-dropdown {
+    left: 0;
+    right: 0;
+    margin-top: 0.25rem;
+    border-radius: 0.5rem;
+    border: 1px solid #dee2e6;
+}
+
+.search-container .input-group {
+    position: relative;
+}
+
+.search-container .btn-outline-secondary {
+    border-left: none;
+}
+</style>

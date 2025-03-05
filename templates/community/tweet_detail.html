@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <!-- Main Tweet -->
+        
+            {% include 'community/tweet_card.html' with tweet=tweet %}
+
+
+    <!-- Replies -->
+        <h5 class="mb-3"><i class="bi bi-newspaper me-2"></i>Replies</h5>
+    
+        {% for reply in replies %}
+
+            {% include 'community/tweet_card.html' with tweet=reply %}
+
+        {% endfor %}
+
+
+
+    <!-- Reply Form -->
+    <div class="card mt-4">
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="input-group">
+                    <textarea name="content" class="form-control" 
+                             placeholder="Write your reply..." required></textarea>
+                    <div class="input-group-append">
+                        <button class="btn btn-dark" type="submit">
+                            <i class="bi bi-send"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <input type="file" name="media" multiple hidden id="media-input">
+                    <label for="media-input" class="btn btn-light btn-sm">
+                        <i class="bi bi-camera"></i>
+                    </label>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,220 @@
+<!-- community/tweet_card.html -->
+{% load static %}
+{% load community_tags %}
+<div class="tweet-card">
+    {% if tweet.is_retweet %}
+    <div class="retweet-header">
+        <i class="bi bi-repeat"></i>
+        <span>Retweeted by @{{ tweet.user.username }}</span>
+    </div>
+    {% endif %}
+
+    <div class="tweet-main">
+        <!-- Profile Picture Section -->
+        <a href="{% url 'users:user_profile' tweet.user.username %}" class="profile-section">
+            <div class="profile-pic">
+                {% if tweet.user.userprofile.profile_picture %}
+                <img src="{{ tweet.user.userprofile.profile_picture.url }}" alt="{{ tweet.user.username }}">
+                {% else %}
+                <div class="profile-pic-placeholder"></div>
+                {% endif %}
+            </div>
+        </a>
+
+        <!-- Content Section -->
+        <div class="content-section">
+            <div class="user-meta">
+                <a href="{% url 'users:user_profile' tweet.user.username %}" class="username">
+                    {{ tweet.user.username }}
+                    {% if tweet.user.userprofile.verified %}
+                    <span class="verified-badge">
+                        <i class="bi bi-patch-check-fill"></i>
+                    </span>
+                    {% endif %}
+                    {% if tweet.user.userprofile.badge != 'none' %}
+                    <span class="badge-icon {{ tweet.user.userprofile.badge }}">
+                        <i class="bi {{ tweet.user.userprofile.get_badge_icon }}"></i>
+                    </span>
+                    {% endif %}
+                </a>
+                <span class="tweet-time">{{ tweet.created_at|time_short }}</span>
+            </div>
+
+            <div class="tweet-body">
+                {% if tweet.retweet %}
+                    <!-- Retweet Content -->
+                    <div class="retweet-content">
+                        <p class="mb-0 tweet-content">
+                            {% for word in tweet.retweet.content.split %}
+                                {% if word|starts_with:"@" %}
+                                    <a href="{% url 'users:user_profile' word|slice:'1:' %}" 
+                                       class="text-primary mention-link">{{ word }}</a>
+                                {% elif word|starts_with:"#" %}
+                                    <a href="{% url 'community:search' %}?q=%23{{ word|slice:'1:' }}" 
+                                       class="text-info hashtag-link">{{ word }}</a>
+                                {% elif word|starts_with:"$" %}
+                                    <a href="{% url 'community:search' %}?q=%24{{ word|slice:'1:' }}" 
+                                       class="text-success stock-link">{{ word }}</a>
+                                {% else %}
+                                    {{ word }}
+                                {% endif %}
+                            {% endfor %}
+                        </p>
+                        <div class="media-grid">
+                            {% for media in tweet.retweet.get_media %}
+                                {% if media.is_image %}
+                                <img src="{{ media.file.url }}" class="media-item">
+                                {% else %}
+                                <video controls class="media-item">
+                                    <source src="{{ media.file.url }}">
+                                </video>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% else %}
+                    <!-- Original Tweet Content -->
+                    <div class="original-content">
+                        <a href="{% if tweet.is_thread %}{% url 'community:thread_detail' tweet.id %}{% else %}{% url 'community:tweet_detail' tweet.id %}{% endif %}">
+                      
+                            <p class="mb-0 tweet-content">
+                              {% for word in tweet.content.split %}
+                                  {% if word|starts_with:"@" %}
+                                      <span class="text-special">{{ word|slice:":1" }}</span>
+                                      <a href="{% url 'users:user_profile' word|slice:'1:' %}" 
+                                         class="mention-link">{{ word|slice:"1:" }}</a>
+                                  {% elif word|starts_with:"#" %}
+                                      <span class="text-special">{{ word|slice:":1" }}</span>
+                                      <a href="{% url 'community:search' %}?q=%23{{ word|slice:'1:' }}" 
+                                         class="hashtag-link">{{ word|slice:"1:" }}</a>
+                                  {% elif word|starts_with:"$" %}
+                                      <span class="text-special">{{ word|slice:":1" }}</span>
+                                      <a href="{% url 'community:search' %}?q=%24{{ word|slice:'1:' }}" 
+                                         class="stock-link">{{ word|slice:"1:" }}</a>
+                                  {% else %}
+                                      <span class="text-special">{{ word }}</span>
+                                  {% endif %}
+                              {% endfor %}
+                          </p>
+                        </a>
+
+                        {% if tweet.quote %}
+                        <div class="quoted-tweet mt-3">
+                            <div class="user-meta">
+                                <a href="{% url 'users:user_profile' tweet.quote.user.username %}" class="username">
+                                    {{ tweet.quote.user.username }}
+                                    {% if tweet.quote.user.userprofile.verified %}
+                                    <i class="bi bi-patch-check-fill verified-badge"></i>
+                                    {% endif %}
+                                </a>
+                                <span class="tweet-time">{{ tweet.quote.created_at|time_short }}</span>
+                            </div>
+                            <a href="{% url 'community:tweet_detail' tweet.quote.id %}">
+                                                <p class="mb-0">
+                                  {% for word in tweet.content.split %}
+                                      {% if word|starts_with:"@" %}
+                                          <a href="{% url 'users:user_profile' word|slice:'1:' %}" 
+                                             class="text-primary mention-link">@{{ word|slice:"1:" }}</a>
+                                      {% elif word|starts_with:"#" %}
+                                          <a href="{% url 'community:search' %}?q=%23{{ word|slice:'1:' }}" 
+                                             class="text-info hashtag-link">#{{ word|slice:"1:" }}</a>
+                                      {% elif word|starts_with:"$" %}
+                                          <a href="{% url 'community:search' %}?q=%24{{ word|slice:'1:' }}" 
+                                             class="text-success stock-link">${{ word|slice:"1:" }}</a>
+                                      {% else %}
+                                          <span class="text-dark">{{ word }}</span>
+                                      {% endif %}
+                                  {% endfor %}
+                              </p>
+                            </a>
+                            <div class="media-grid">
+                                {% for media in tweet.quote.get_media %}
+                                    {% if media.is_image %}
+                                    <img src="{{ media.file.url }}" class="media-item">
+                                    {% else %}
+                                    <video controls class="media-item">
+                                        <source src="{{ media.file.url }}">
+                                    </video>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <div class="media-grid">
+                            {% for media in tweet.get_media %}
+                                {% if media.is_image %}
+                                <img src="{{ media.file.url }}" class="media-item">
+                                {% else %}
+                                <video controls class="media-item">
+                                    <source src="{{ media.file.url }}">
+                                </video>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Thread Indicators -->
+            {% if tweet.is_thread and not tweet.parent_tweet %}
+            <div class="thread-indicator mt-2">
+                <a href="{% url 'community:thread_detail' tweet.id %}" 
+                   class="text-decoration-none small text-muted">
+                    <i class="bi bi-link-45deg"></i>
+                    Thread ({{ tweet.thread.count }} parts)
+                </a>
+            </div>
+            {% endif %}
+
+            <!-- Action Buttons -->
+            <div class="tweet-actions border-top pt-2 mt-2" data-time="{{ tweet.created_at|time_short }}">
+                <div class="d-flex justify-content-between align-items-center">
+                    <!-- Like Button -->
+                    <button class="btn btn-link text-muted p-0 like-btn" data-tweet-id="{{ tweet.id }}">
+                        <i class="bi bi-heart{% if request.user in tweet.likes.all %}-fill text-danger{% endif %}"></i>
+                        <span class="count">{{ tweet.likes.count }}</span>
+                    </button>
+    
+                    <!-- Reply Button -->
+                    <a href="{% url 'community:reply_tweet' tweet.id %}" class="btn btn-link text-muted p-0">
+                        <i class="bi bi-chat"></i>
+                        <span class="count">{{ tweet.replies.count }}</span>
+                    </a>
+    
+                    <!-- Retweet Button -->
+                    <button class="btn btn-link text-muted p-0 retweet-btn" data-tweet-id="{{ tweet.id }}">
+                        <i class="bi bi-repeat{% if tweet|is_retweeted_by:request.user %}-fill text-success{% endif %}"></i>
+                        <span class="count">{{ tweet.retweet_count }}</span>
+                    </button>
+    
+                    <!-- Quote Button -->
+                    <a href="{% url 'community:quote_retweet' tweet.id %}" class="btn btn-link text-muted p-0">
+                        <i class="bi bi-quote"></i>
+                    </a>
+    
+                    <!-- Thread Button -->
+                    {% if tweet.is_thread %}
+                    <a href="{% url 'community:create_tweet' tweet_id=tweet.id %}?thread=true" 
+                       class="btn btn-link text-muted p-0">
+                        <i class="bi bi-link-45deg"></i>
+                    </a>
+                    {% endif %}
+    
+                    <!-- Delete Button -->
+                    {% if tweet.user == request.user %}
+                    <form class="delete-tweet-form d-inline" 
+                          action="{% url 'community:delete_tweet' tweet.id %}" 
+                          method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-link text-danger p-0">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

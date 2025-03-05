@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card compose-card shadow">
+                <div class="card-body">
+                    <h5 class="card-title mb-4 text-muted">
+                        <i class="bi bi-pencil-square"></i> Compose Tweet
+                    </h5>
+                    
+                    <form method="post" enctype="multipart/form-data" class="tweet-form">
+                        {% csrf_token %}
+                        
+                        <!-- Content Field -->
+                        <div class="form-group mb-3">
+                            <textarea 
+                                name="content" 
+                                class="form-control tweet-content" 
+                                rows="4" 
+                                placeholder="What's happening?"
+                                maxlength="280"
+                            ></textarea>
+                        </div>
+
+                        <!-- Media Upload Section -->
+                        <!-- In compose.html -->
+                      <div class="media-upload mb-4">
+                          <input type="file" name="media" multiple accept="image/*, video/*" id="media-input" hidden>
+                          <label for="media-input" class="media-label btn btn-light rounded-circle">
+                              <i class="bi bi-camera"></i>
+                          </label>
+                          <small class="text-muted ms-2">Add up to 4 photos/videos</small>
+                      </div>
+                      {% if request.GET.thread %}
+                      <div class="alert alert-info mt-3">
+                          <i class="bi bi-layers"></i> You're starting a thread. Subsequent tweets will be added to this thread.
+                      </div>
+                      {% endif %}
+
+                        <!-- Form Actions -->
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{% url 'community:feed' %}" class="btn btn-outline-secondary">
+                                Cancel
+                            </a>
+                            <button type="submit" class="btn btn-dark rounded-pill px-4">
+                                <i class="bi bi-send me-2"></i>Post
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

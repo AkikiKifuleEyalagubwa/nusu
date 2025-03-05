@@ -1,0 +1,36 @@
+<div class="search-container position-relative" x-data="{ isOpen: false }">
+    <form action="{% url 'community:search' %}" method="GET">
+        <div class="input-group">
+            <input type="text" 
+                   class="form-control" 
+                   name="q" 
+                   id="searchInput"
+                   placeholder="Search users, hashtags, or topics..."
+                   x-ref="searchInput"
+                   hx-get="{% url 'community:autocomplete' %}"
+                   hx-trigger="keyup changed delay:250ms"
+                   hx-target="#autocomplete-results"
+                   @input="isOpen = $event.target.value !== ''"
+                   @keydown.escape="isOpen = false">
+            <button class="btn btn-outline-secondary" type="submit">
+                <i class="bi bi-search"></i>
+            </button>
+        </div>
+    </form>
+
+    <!-- Autocomplete Results -->
+    <div id="autocomplete-results" 
+         class="autocomplete-dropdown card position-absolute w-100 shadow mt-1"
+         x-show="isOpen"
+         x-transition:enter="transition ease-out duration-100"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-75"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         style="display: none;"
+         @click.away="isOpen = false"
+         x-cloak>
+        <!-- Results will be inserted here -->
+    </div>
+</div>

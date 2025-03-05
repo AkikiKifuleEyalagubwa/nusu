@@ -1,0 +1,14 @@
+<div class="d-flex align-items-center mb-2">
+    <img src="{{ tweet.user.userprofile.profile_picture.url }}" 
+         class="rounded-circle me-2" width="40" height="40">
+    <div>
+        <strong>
+            <a href="{% url 'users:user_profile' tweet.user.username %}" 
+               class="text-decoration-none text-dark">
+                {{ tweet.user.username }}
+            </a>
+        </strong>
+        <small class="text-muted">{{ tweet.created_at|timesince }} ago</small>
+    </div>
+</div>
+<p class="mb-2">{{ tweet.content }}</p>

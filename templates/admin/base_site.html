@@ -1,0 +1,28 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | Savings App Admin{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">Savings App Admin</a>
+</h1>
+{% endblock %}
+
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'admin/css/custom.css' %}">
+{% endblock %}
+
+{% block nav-global %}
+<!-- Custom Navigation -->
+<div id="nav-global">
+    <ul>
+        <li><a href="{% url 'admin:index' %}">Dashboard</a></li>
+        <li><a href="{% url 'admin:users_customuser_changelist' %}">Users</a></li>
+        <li><a href="{% url 'admin:tokens_tokenrate_changelist' %}">Tokens</a></li>
+        <li><a href="{% url 'admin:transactions_transaction_changelist' %}">Transactions</a></li>
+        <li><a href="{% url 'admin:streaks_streak_changelist' %}">Streaks</a></li>
+        <li><a href="{% url 'admin:community_post_changelist' %}">Community</a></li>
+    </ul>
+</div>
+{% endblock %}

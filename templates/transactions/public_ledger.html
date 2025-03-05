@@ -1,0 +1,197 @@
+<!-- templates/transactions/public_ledger.html -->
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_scripts %}
+<!-- Include jQuery for autocomplete -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Include jQuery UI for autocomplete -->
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script>
+    $(function() {
+        // Autocomplete for the search bar
+        $("#search-bar").autocomplete({
+            source: "{% url 'transactions:public_ledger_autocomplete' %}",
+            minLength: 2,
+            select: function(event, ui) {
+                window.location.href = "{% url 'transactions:public_ledger' %}?q=" + ui.item.value;
+            }
+        });
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm mx-auto" style="max-width: 1200px;">
+    <div class="card-body">
+        <div class="text-center mb-4">
+            <h2 class="mb-3">🔗 NUSU Scan (Public Ledger)</h2>
+            <img src="{% static 'images/logo.png' %}" alt="Logo" style="height: 80px;" class="mb-3">
+            <p class="text-muted">Explore all transactions on the NUSU blockchain.</p>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="mb-4">
+            <form method="get" action="{% url 'transactions:public_ledger' %}">
+                <div class="input-group">
+                    <input type="text" id="search-bar" name="q" class="form-control" placeholder="Search by Transaction ID, User, or Agent..." value="{{ request.GET.q }}">
+                    <button type="submit" class="btn btn-dark">
+                        <i class="bi bi-search"></i> Search
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Transactions List -->
+        <div class="ledger-container">
+            {% for tx in transactions %}
+            <div class="ledger-item">
+                <div class="ledger-header">
+                    <span class="ledger-id">#{{ tx.id }}</span>
+                    <span class="ledger-date">{{ tx.timestamp|date:"d/m/Y H:i" }}</span>
+                </div>
+                <div class="ledger-body">
+                    <div class="ledger-row">
+                        <span class="ledger-label">User:</span>
+                        <span class="ledger-value">{{ tx.user.username }} (ID: {{ tx.user.id }})</span>
+                    </div>
+                    <div class="ledger-row">
+                        <span class="ledger-label">Agent:</span>
+                        <span class="ledger-value">
+                            {% if tx.agent %}
+                                {{ tx.agent.username }}
+                            {% else %}
+                                System
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="ledger-row">
+                        <span class="ledger-label">Type:</span>
+                        <span class="ledger-value text-uppercase">{{ tx.transaction_type }}</span>
+                    </div>
+                    <div class="ledger-row">
+                        <span class="ledger-label">Amount:</span>
+                        <span class="ledger-value">
+                            {% if tx.transaction_type == 'deposit' %}
+                                UGX {{ tx.amount }}
+                            {% else %}
+                                {{ tx.amount }} Tokens
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="ledger-row">
+                        <span class="ledger-label">Hash:</span>
+                        <span class="ledger-value">
+                            {% if tx.hashed_detail %}
+                                77{{ tx.hashed_detail|slice:"2:10" }}...
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="ledger-row">
+                        <span class="ledger-label">Previous Hash:</span>
+                        <span class="ledger-value">
+                            {% if tx.previous_hash %}
+                                77{{ tx.previous_hash|slice:"2:10" }}...
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+                <div class="ledger-divider"></div>
+            </div>
+            {% empty %}
+            <div class="text-center py-4">
+                <p>No transactions found.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if transactions.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ transactions.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Previous</a>
+                </li>
+                {% endif %}
+                {% for num in transactions.paginator.page_range %}
+                <li class="page-item {% if transactions.number == num %}active{% endif %}">
+                    <a class="page-link" href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ num }}</a>
+                </li>
+                {% endfor %}
+                {% if transactions.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ transactions.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Next</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<style>
+    .ledger-container {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        background-color: #f9f9f9;
+    }
+
+    .ledger-item {
+        margin-bottom: 20px;
+        padding: 15px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .ledger-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .ledger-id {
+        font-weight: bold;
+        color: #2A3F54;
+    }
+
+    .ledger-date {
+        color: #666;
+        font-size: 0.9em;
+    }
+
+    .ledger-body {
+        padding: 10px 0;
+    }
+
+    .ledger-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+    }
+
+    .ledger-label {
+        font-weight: bold;
+        color: #2A3F54;
+    }
+
+    .ledger-value {
+        color: #333;
+    }
+
+    .ledger-divider {
+        border-bottom: 1px dashed #ddd;
+        margin: 15px 0;
+    }
+
+    .pagination {
+        margin-top: 20px;
+    }
+</style>
+{% endblock %}

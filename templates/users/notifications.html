@@ -1,0 +1,58 @@
+<!-- users/templates/users/notifications.html -->
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="bi bi-bell"></i> Notifications</h2>
+        <div>
+            <a href="{% url 'users:notifications' %}?filter=unread" class="btn btn-outline-dark">
+                Show Unread Only
+            </a>
+            <a href="{% url 'users:notifications' %}" class="btn btn-outline-dark">
+                Show All
+            </a>
+        </div>
+    </div>
+
+    <div class="list-group">
+        {% for notification in notifications %}
+        <div class="list-group-item {% if not notification.is_read %}list-group-item-warning{% endif %}">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between">
+                        <p class="mb-0">{{ notification.message }}</p>
+                        <small class="text-muted ms-3">
+                            {{ notification.created_at|date:"M d, Y H:i" }}
+                        </small>
+                    </div>
+                    {% if notification.transaction %}
+                    <div class="mt-2">
+                        <a href="{% url 'transactions:transaction_detail' notification.transaction.id %}" 
+                           class="btn btn-sm btn-outline-dark">
+                            <i class="bi bi-receipt"></i> View Transaction
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="ms-3">
+                    <a href="{% url 'users:delete_notification' notification.id %}" 
+                       class="btn btn-sm btn-danger">
+                        <i class="bi bi-trash"></i>
+                    </a>
+                    {% if not notification.is_read %}
+                    <a href="{% url 'users:mark_notification_as_read' notification.id %}" 
+                       class="btn btn-sm btn-success">
+                        <i class="bi bi-check-lg"></i>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="alert alert-info">
+            No notifications found
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

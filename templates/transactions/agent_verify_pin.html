@@ -1,0 +1,16 @@
+<!-- transactions/templates/transactions/agent_verify_pin.html -->
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Verify Withdrawal PIN</h2>
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="transaction_id" value="{{ transaction_id }}">
+        <div class="form-group">
+            <label for="pin">Enter PIN</label>
+            <input type="text" class="form-control" id="pin" name="pin" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Verify</button>
+    </form>
+</div>
+{% endblock %}

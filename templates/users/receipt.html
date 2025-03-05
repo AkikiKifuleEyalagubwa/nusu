@@ -1,0 +1,57 @@
+<!-- users/receipt.html -->
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <div class="text-center mb-4">
+            <h2>Transaction Receipt</h2>
+            <p class="text-muted">NUSU App</p>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <h5>Transaction Details</h5>
+                <p><strong>Type:</strong> {{ transaction.transaction_type|title }}</p>
+                <p><strong>Amount:</strong> {{ transaction.amount }} Tokens</p>
+                <p><strong>Date:</strong> {{ transaction.timestamp|date:"M d, Y H:i" }}</p>
+                <p><strong>Status:</strong> {{ transaction.status|title }}</p>
+            </div>
+            
+            <div class="col-md-6">
+                <h5>Parties Involved</h5>
+                <p><strong>User:</strong> {{ transaction.user.username }}</p>
+                <p><strong>Agent:</strong> {{ transaction.agent.username }}</p>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <button onclick="window.print()" class="btn btn-dark">
+                <i class="bi bi-printer"></i> Print Receipt
+            </button>
+            <a href="{% url 'dashboard' %}" class="btn btn-outline-dark">
+                Back to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    .card, .card * {
+        visibility: visible;
+    }
+    .card {
+        position: absolute;
+        left: 0;
+        top: 0;
+        border: none;
+    }
+    .btn {
+        display: none;
+    }
+}
+</style>
+{% endblock %}

@@ -1,0 +1,69 @@
+<!-- templates/community/search_results.html -->
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h3 class="mb-4">Search results for "{{ query }}"</h3>
+    
+    {% if users %}
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="bi bi-people me-2"></i> Users
+        </div>
+        <div class="card-body">
+            <div class="row">
+                {% for user in users %}
+                <div class="col-md-6 mb-3">
+                    <div class="d-flex align-items-center">
+                        <img src="{{ user.userprofile.profile_picture.url }}" 
+                             class="rounded-circle me-3" width="50" height="50">
+                        <div>
+                            <h5 class="mb-0">@{{ user.username }}</h5>
+                            <p class="text-muted mb-0">{{ user.get_full_name }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if hashtags %}
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="bi bi-hash me-2"></i> Hashtags
+        </div>
+        <div class="card-body">
+            <div class="row">
+                {% for hashtag in hashtags %}
+                <div class="col-md-6 mb-3">
+                    <a href="{% url 'community:search' %}?q=%23{{ hashtag.name }}" 
+                       class="text-decoration-none">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">#{{ hashtag.name }}</h5>
+                                <p class="text-muted">{{ hashtag.related_tweets.count }} posts</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if tweets %}
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="bi bi-chat-quote me-2"></i> Tweets
+        </div>
+        <div class="card-body">
+            {% for tweet in tweets %}
+                {% include 'community/tweet_card.html' with tweet=tweet %}
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

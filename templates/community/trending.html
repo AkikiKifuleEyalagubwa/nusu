@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <!-- Page Header -->
+            <div class="card mb-4">
+                <div class="card-header bg-white border-bottom-0">
+                    <h2><i class="bi bi-fire text-danger"></i> Trending Now</h2>
+                </div>
+            </div>
+
+            <!-- Trending Hashtags -->
+            <div class="row g-4">
+                {% for hashtag in trending_hashtags %}
+                <div class="col-md-6">
+                    <div class="card trending-card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="badge bg-primary me-2">#{{ forloop.counter }}</span>
+                                    <strong>#{{ hashtag.name }}</strong>
+                                </div>
+                                <span class="text-muted small">{{ hashtag.calculated_score }} posts</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
